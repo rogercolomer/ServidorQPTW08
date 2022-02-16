@@ -1,0 +1,16 @@
+{
+  "variables": ["TCTR_106_INT_MCB1_ME_TSOR_AIGUA",
+            "TCTR_106_INT_MCB2_ME_TSOR_AIGUA",
+            "TCTR_100_ME_TIMP_ST17_CAS1",
+            "TCTR_100_ME_TIMP_ST16_CAS2",
+            "TCTR_100_ME_TDEP_90_ALT",
+            "TCTR_100_ME_TDEP_80_ALT",
+            "TCTR_100_XS_TEMP_CALOR_DIPOSIT",
+            "TCTR_100_XS_DIP_CALOR_SEC",
+            "TCTR_101_ME_TDEP_7_ALT",
+            "TCTR_106_INT_MABS_ME_XSREFEDA",
+            "TCTR_106_INT_MCB1_ME_TCOM_CAMBRE",
+            "TCTR_106_INT_MCB2_ME_TCOM_CAMBRE"],
+  "db" : "biomassa",
+  "taula": "estatTemp"
+}

@@ -1,0 +1,16 @@
+{
+  "variables": ["TCTR_103_CT_01_ME_ENERGIA",
+                "TCTR_103_CT_02_ME_ENERGIA",
+                "TCTR_103_CT_05_ME_ENERGIA",
+                "TCTR_103_CT_03_ME_ENERGIA",
+                "TCTR_103_CT_01_ME_KG_SEG_PCI",
+                "TCTR_103_CT_04_ME_ENERGIA",
+                "TCTR_103_CT_01_ME_KGH_SEG_PCI",
+                "TCTR_103_CT_01_ME_POTENCIA",
+                "TCTR_103_CT_02_ME_POTENCIA",
+                "TCTR_103_CT_03_ME_POTENCIA",
+                "TCTR_103_CT_04_ME_POTENCIA"
+  ],
+  "db" : "biomassa",
+  "taula": "consums"
+}
