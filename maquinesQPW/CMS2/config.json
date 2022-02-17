@@ -1,0 +1,14 @@
+{
+  "protocol": "gpio",
+  "targeta": "DI10",
+  "variables":
+  {"state":{"port":"di1", "interrupt":"both","use":"True"},
+    "pIn":{"port":"di0", "interrupt":"rising","use":"True"}},
+  "linea": "CMS2",
+  "nLinea": 103,
+  "seccio":"cnc",
+  "password": "123456789"
+}
+
+
+

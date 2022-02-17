@@ -1,0 +1,11 @@
+{
+  "protocol": "gpio",
+  "targeta": "DI10",
+  "variables":
+  {"pIn":{"port":"di0", "interrupt":"rising","use":"True"},
+   "state":{"port":"di1", "interrupt":"both","use":"True"}},
+  "linea": "BULLERI",
+  "nLinea": 11,
+  "seccio":"CNC",
+  "password": "123456789"
+}

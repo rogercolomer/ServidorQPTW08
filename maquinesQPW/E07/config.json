@@ -1,0 +1,12 @@
+{
+  "protocol": "USB",
+  "variables":
+  {
+    "pIn":{"len":2,"use":"True"},
+    "pOut":{"len":2,"use":"True"},
+    "state":{"len":1,"use":"True"}},
+  "linea": "E07",
+  "nLinea": 91,
+  "seccio":"muntatge",
+  "password": "123456789"
+}

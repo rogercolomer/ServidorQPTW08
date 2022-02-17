@@ -1,0 +1,17 @@
+{
+  "protocol": "Snap7",
+  "variables":
+  {
+    "pIn":{"len":2,"use":"True"},
+    "pOut":{"len":2,"use":"True"},
+    "state":{"len":1,"use":"True"},
+    "a0":{"len":1,"use":"True"},
+    "a1":{"len":1,"use":"True"},
+    "a2":{"len":1,"use":"True"}},
+  "linea": "F08",
+  "nLinea": 69,
+  "seccio":"fregadores",
+  "password": "123456789",
+  "ip": "192.168.250.1",
+  "db": 88
+}

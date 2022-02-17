@@ -1,0 +1,14 @@
+{
+  "protocol": "USB",
+  "variables":
+  {
+    "pIn":{"len":2,"use":"True"},
+    "pOut":{"len":2,"use":"False"},
+    "state":{"len":1,"use":"True"},
+    "a0":{"len":1,"use":"True"},
+    "a1":{"len":1,"use":"True"}},
+  "linea": "L06",
+  "nLinea": 112,
+  "seccio":"cmec",
+  "password": "123456789"
+}

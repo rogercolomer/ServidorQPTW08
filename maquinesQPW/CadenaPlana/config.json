@@ -1,0 +1,13 @@
+{
+  "protocol": "RS232 2050",
+  "variables":
+  [["pIn", 2, 1], ["pOut", 2, 0], ["state", 1, 1],
+ ["a0", 1, 1], ["a1", 1, 1], ["a2", 1, 1],
+ ["a3", 1, 1], ["a4", 1, 1], ["a5", 1, 1]],
+  "linea": "CadenaPlana",
+  "nLinea": 55,
+  "seccio":"pintura",
+  "password": "123456789"
+}
+
+

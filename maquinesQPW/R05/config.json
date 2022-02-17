@@ -1,0 +1,13 @@
+{
+  "protocol": "ModbusRTU",
+  "variables":
+  [["pIn", 2, 1], ["pOut", 2, 0], ["state", 1, 1],
+  ["a0", 1, 1],["a1", 1, 1]],
+  "linea": "R05",
+  "nLinea": 18,
+  "seccio":"revolvers",
+  "password": "123456789"
+
+}
+
+
