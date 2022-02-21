@@ -9,7 +9,7 @@ from telebot import types
 from datetime import datetime
 
 def getKeys():
-    file = open("/home/roger/repositori/Telegram/usersBot.json")
+    file = open("/home/roger/repositori/ServidorQPWood/Telegram/usersBot.json")
     dicConfig = json.load(file)
     file.close()
     return dicConfig

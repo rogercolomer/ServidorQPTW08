@@ -1,0 +1,63 @@
+{
+  "Aspiracio": {
+    "ip": ["192.100.101.26"],
+    "device": "IOT2040",
+    "user": "root",
+    "pwd": "123456789"
+  },
+  "Compressors": {
+    "ip": ["192.100.101.31"],
+    "device": "IOT2040",
+    "user": "root",
+    "pwd": ""
+  },
+  "OTR": {
+    "ip": ["192.100.101.27"],
+    "device": "IOT2040",
+    "user": "root",
+    "pwd": ""
+  },
+  "Pantalla1": {
+    "ip": ["147.45.45.250"],
+    "device": "RPI",
+    "user": "pi",
+    "pwd": "123456789"},
+  "Pantalla2": {
+    "ip": ["147.45.45.251"],
+    "device": "RPI",
+    "user": "pi",
+    "pwd": "123456789"},
+  "Pantalla3": {
+    "ip": ["147.45.45.252"],
+    "device": "RPI",
+    "user": "pi",
+    "pwd": "123456789"},
+  "Pantalla4": {
+    "ip": ["147.45.45.253"],
+    "device": "RPI",
+    "user": "pi",
+    "pwd": "123456789"},
+  "PantallaFishTank": {
+    "ip": ["147.45.44.206"],
+    "device": "RPI",
+    "user": "pi",
+    "pwd": "123456789"},
+  "BackupsRobots": {
+    "ip": ["192.100.100.200"],
+    "device": "IOT2050",
+    "user": "root",
+    "pwd": "123456789"
+  },
+  "Seccionadors": {
+    "ip": ["192.100.100.200"],
+    "device": "IOT2050",
+    "user": "root",
+    "pwd": "123456789"
+  },
+  "sirenaHoraria": {
+    "ip": ["192.100.100.200"],
+    "device": "IOT2050",
+    "user": "root",
+    "pwd": "123456789"
+  }
+}

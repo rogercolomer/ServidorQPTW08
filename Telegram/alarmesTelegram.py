@@ -12,7 +12,7 @@ from datetime import timedelta
 # chat_id = ['743717839', '815134963', '1259688712', '409835547', '1772890260','2103459791','2103459926','857156986']
 
 def getKeys():
-    file = open("/home/user/Telegram/usersAlarmesTM.json")
+    file = open("/home/roger/repositori/ServidorQPWood/Telegram/usersAlarmesTM.json")
     dicConfig = json.load(file)
     file.close()
     return dicConfig
@@ -56,13 +56,14 @@ class Alarm_aspiracio:
         self.t = t
 
     def read_excel(self):
-        book = openpyxl.load_workbook('/home/user/Telegram/Alarmes_telegram_socket.xlsx')
-        sheet = book.active
-        self.messages = {}
-        for i in range(2, 233):
-            c1 = "B" + str(i)
-            c2 = "C" + str(i)
-            self.messages[sheet[c1].value] = sheet[c2].value
+        pass
+        # book = openpyxl.load_workbook('/home/user/Telegram/Alarmes_telegram_socket.xlsx')
+        # sheet = book.active
+        # self.messages = {}
+        # for i in range(2, 233):
+        #     c1 = "B" + str(i)
+        #     c2 = "C" + str(i)
+        #     self.messages[sheet[c1].value] = sheet[c2].value
 
     def get_message(self,n):
         return self.messages[n]

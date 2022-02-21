@@ -1,0 +1,8 @@
+{
+  "comprovacioIOT": ["lines.json", "stateIOT.py"],
+  "ConsumsCircutor": ["*"],
+  "controlWS": ["*"],
+  "resetPantalles": ["*"],
+  "visualitzadorMesbook": ["*"],
+  "gamesQualitat": ["*"]
+}

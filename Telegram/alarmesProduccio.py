@@ -10,7 +10,7 @@ from datetime import datetime
 from datetime import timedelta
 
 def getKeys():
-    file = open("/home/user/Telegram/usersAlarmesProduccio.json")
+    file = open("/home/roger/repositori/ServidorQPWood/Telegram/usersAlarmesProduccio.json")
     dicConfig = json.load(file)
     file.close()
     return dicConfig

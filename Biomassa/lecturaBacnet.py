@@ -187,10 +187,10 @@ class consumsBio(estatPlanta):
             print('error save Consums ')
 
 
-e = estatPlanta(file = "/home/roger/repositori/biomassa/estat.json")
+e = estatPlanta(file = "/home/roger/repositori/ServidorQPWood/Biomassa/estat.json")
 e.getQuery()
-f = alarmesBio(file = "/home/roger/repositori/biomassa/alarmes.json")
-g = consumsBio(file = "/home/roger/repositori/biomassa/consum.json")
+f = alarmesBio(file = "/home/roger/repositori/ServidorQPWood/Biomassa/alarmes.json")
+g = consumsBio(file = "/home/roger/repositori/ServidorQPWood/Biomassa/consum.json")
 g.getQuery()
 # Falten les seguents variables
 # "TCTR_100_ME_CONTA_AIGUA",
