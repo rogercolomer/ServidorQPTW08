@@ -10,6 +10,7 @@ from datetime import datetime
 from datetime import timedelta
 
 # chat_id = ['743717839', '815134963', '1259688712', '409835547', '1772890260','2103459791','2103459926','857156986']
+time.sleep(60)
 
 def getKeys():
     file = open("/home/roger/repositori/ServidorQPWood/Telegram/usersAlarmesTM.json")
@@ -189,8 +190,11 @@ class Telegram:
         self.bitComp = 0
         self.lastAlarmOTR = []
         self.lastAlarm = []
+        self.lastAlarmAspriacio = []
         self.readLastAlarmBio()
         self.readLastAlarmOTR()
+        self.readLastAlarmAspiracio()
+
 
 
     def init_consums(self):
@@ -549,6 +553,7 @@ class Telegram:
                 mes += self.actualAlarm[a]+' \n'
                 self.send_mes_colomer(mes)
         self.lastAlarm = self.actualAlarm
+        print(self.actualAlarm)
 
     def readAlarmesOTR(self):
         mydb = mysql.connector.connect(
@@ -581,6 +586,38 @@ class Telegram:
                 self.send_mes_colomer(mes)
         self.lastAlarmOTR = self.actualAlarmOTR
 
+    #Aspiracio
+    def readAlarmesAspiracio(self):
+        mydb = mysql.connector.connect(
+            host= '192.100.101.40',
+            user= 'aspiracio',
+            passwd= '123456789',
+            database= 'aspiracio')
+        mycursor = mydb.cursor()
+        sql = """SELECT * FROM alarma """
+        mycursor.execute(sql)
+        var = mycursor.fetchall()
+        mydb.close()
+        values = {}
+        for i in var:
+            values[i[1]] = i[2]
+        return values
+
+    def readLastAlarmAspiracio(self):
+        self.lastAlarmAspiracio = self.readAlarmesAspiracio()
+
+    def sendAlarmAspiracio(self):
+        self.actualAlarmAspiracio = {}
+        self.actualAlarmAspiracio = self.readAlarmesAspiracio()
+        for a in self.actualAlarmAspiracio:
+            if a in self.lastAlarmAspiracio:
+                pass
+            else:
+                mes = "🏭 *Aspiracio*: \n"
+                mes += self.actualAlarmAspiracio[a]+' \n'
+                self.send_mes_colomer(mes)
+        self.lastAlarmAspiracio = self.actualAlarmAspiracio
+
 """https://api.telegram.org/bot867573955:AAEJUO1URD6ICiinQ-sr_kEPnmuJ2dCMgNs/getUpdates"""
 token = '867573955:AAEJUO1URD6ICiinQ-sr_kEPnmuJ2dCMgNs'
 
@@ -593,9 +630,9 @@ while(True):
         r_c = t.read_consums()
         if r_c:
             t.send_paros()
-        r_aa = t.read_alarms_aspiracio()
-        if r_aa:
-            t.alarms_aspiracio()
+        # r_aa = t.read_alarms_aspiracio()
+        # if r_aa:
+        #     t.alarms_aspiracio()
         r_so = t.read_state_OTR()
         if r_so:
             t.send_state_OTR()
@@ -608,9 +645,9 @@ while(True):
         r_Scomp = t.readStateComp()
         if r_Scomp:
             t.sendStateComp()
-
         t.sendAlarmBio()
         t.sendAlarmOTR()
+        t.sendAlarmAspiracio()
         if datetime.now().hour == 8:
             if flag_reboot == 0:
                 t.imAlive()
@@ -619,7 +656,7 @@ while(True):
             flag_reboot = 0
 
         tb.stop_bot()
-        time.sleep(5)
+        time.sleep(10)
     except KeyboardInterrupt:
         raise
     except Exception as e:
