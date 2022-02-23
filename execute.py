@@ -5,15 +5,19 @@ import time
 
 
 def estructures():
-    '''Monitoritzar el WS per verure si funciona correctament, guardant dades al mariaDB'''
-    os.system('python3 /home/server/controlWS/estatWS.py &')
+    '''Estructures'''
+    print('estructures')
+    os.system('python3 /home/roger/repositori/ServidorQPWood/Estructures/main.py')
 
 def maquinesQPW():
-    ''' Llegir i guardar els consums de tota la fabrica en la DB del linux i grafana '''
-    os.system('python3 /home/server/consumsCircutor.py &')
+    ''' Totes les maquines connecades a mesboko '''
+    print('maquines')
+    os.system('python3 /home/roger/repositori/ServidorQPWood/maquinesQPW/main.py')
 
 def servidorMoll():
-    os.system('python3 /home/server/ConsumsCircutor/consumsQuartHoraris.py &')
+    '''Programes del servidor moll'''
+    print('Server')
+    os.system('python3 /home/roger/repositori/ServidorQPWood/ServidorMoll/main.py')
 
 def copyFiles():
     estructures()
@@ -26,9 +30,11 @@ hServidorMoll = datetime.now()
 flag_backups = 0
 
 while (True):
-    if datetime.now().weekday() == 4:
+    print(flag_backups)
+    if datetime.now().weekday() == 0 and datetime.now().hour == 15:
         if flag_backups == 0:
                 copyFiles()
                 flag_backups = 1
     elif datetime.now().day == 5:
         flag_backups = 0
+    time.sleep(10)

@@ -600,7 +600,7 @@ class Telegram:
         mydb.close()
         values = {}
         for i in var:
-            values[i[1]] = i[2]
+            values[i[2]] = i[1]
         return values
 
     def readLastAlarmAspiracio(self):
@@ -615,7 +615,7 @@ class Telegram:
             else:
                 mes = "🏭 *Aspiracio*: \n"
                 mes += self.actualAlarmAspiracio[a]+' \n'
-                self.send_mes_colomer(mes)
+                self.send_mes(mes)
         self.lastAlarmAspiracio = self.actualAlarmAspiracio
 
 """https://api.telegram.org/bot867573955:AAEJUO1URD6ICiinQ-sr_kEPnmuJ2dCMgNs/getUpdates"""

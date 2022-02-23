@@ -84,31 +84,24 @@ def Otr(message):
 
 
 @tb.message_handler(commands=['AlarmesAspiracio'])
-def Rodaments(message):
+def AlarmesAspriacio(message):
     mydb = mysql.connector.connect(
         host='192.100.101.40',
-        user='telegram',
+        user='aspiracio',
         passwd='123456789',
         database='aspiracio')
-    if mydb.is_connected():
-        mycursor = mydb.cursor()
-        sql = "SELECT timestamp, alarm_code0, alarm_code1, alarm_code2, alarm_code3, alarm_code4 FROM alarmes ORDER BY timestamp DESC LIMIT 1"
-        mycursor.execute(sql)
-        records = mycursor.fetchall()
-        mydb.close()
-        al_list = []
-        for c in range(1, 6):
-            al_list.append(records[0][c])
-        if al_list == [0, 0, 0, 0, 0]:
-            m = "*🏭 Aspiracio*: No hi ha cap alarma activa"
-            enviar_missatge(message.chat.id, m)
-        else:
-            for a in al_list:
-                if a == 0:
-                    pass
-                else:
-                    m = dic[a]
-                    enviar_missatge(message.chat.id, m)
+
+    sql = "SELECT * FROM alarma"
+    mycursor = mydb.cursor()
+    mycursor.execute(sql)
+    values = mycursor.fetchall()
+
+    mydb.close()
+    if values != []:
+        m = "🏭* Alarmes Aspiracio*: \n"
+        for i in values:
+            m += i[1] + " \n"
+        enviar_missatge(message.chat.id, m)
 
 
 
@@ -241,7 +234,7 @@ def Biomassa(message):
     if values != []:
         m = "🌲 *Alarmes Biomassa*: \n"
         for i in values:
-            m += "- "+i[2]+" \n"
+            m += i[2]+" \n"
         enviar_missatge(message.chat.id, m)
 
 def enviar_missatge(idtelebot, missatge):

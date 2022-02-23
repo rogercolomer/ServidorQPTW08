@@ -10,7 +10,20 @@
             "TCTR_101_ME_TDEP_7_ALT",
             "TCTR_106_INT_MABS_ME_XSREFEDA",
             "TCTR_106_INT_MCB1_ME_TCOM_CAMBRE",
-            "TCTR_106_INT_MCB2_ME_TCOM_CAMBRE"],
+            "TCTR_106_INT_MCB2_ME_TCOM_CAMBRE",
+            "TCTR_100_OR_CALD_BIOMASA_CAB01",
+            "TCTR_100_OR_CALD_BIOMASA_CAB02",
+            "TCTR_106_INT_MCB1_ES_VENT_COMB",
+            "TCTR_106_INT_MCB2_ES_VENT_COMB",
+            "TCTR_100_OR_CALD_GAS_CAG1.1",
+            "TCTR_100_OR_CALD_GAS_CAG2.1",
+            "TCTR_100_ME_TEMP_EXT",
+            "TCTR_100_ME_HUM_EXT",
+            "TCTR_100_ES_ANTIGEL_PRODUCCIO",
+            "TCTR_101_OR_REF_ABS",
+            "TCTR_101_ES_ENF-ABS01",
+            "TCTR_100_XS_TANTIGEL_PRODUCCIO"
+            ],
   "db" : "biomassa",
   "taula": "estatTemp"
 }

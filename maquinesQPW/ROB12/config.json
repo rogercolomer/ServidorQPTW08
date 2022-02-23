@@ -1,0 +1,14 @@
+{
+  "protocol": "gpio",
+  "targeta": "DI10",
+  "variables":
+  {"pIn":{"port":"di0", "interrupt":"rising","use":"True"},
+   "state":{"port":"di1", "interrupt":"both","use":"True"}},
+  "linea": "ROB12",
+  "nLinea": 44,
+  "seccio":"robots",
+  "password": "123456789"
+}
+
+
+

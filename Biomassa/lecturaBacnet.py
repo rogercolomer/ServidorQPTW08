@@ -35,6 +35,12 @@ class estatPlanta():
         sql = "INSERT INTO "+self.taula+"(timestamp,"
         sql1 = ") VALUES (%s,"
         for k in self.keys:
+            pGuio = k.find('-')
+            pPunt = k.find('.')
+            if pGuio != -1:
+                k = k.replace('-','_')
+            if pPunt != -1:
+                k = k.replace('.','_')
             sql += k + ','
             sql1 += '%s,'
         self.sql =  sql[:-1] + sql1[:-1] + ')'
@@ -43,13 +49,18 @@ class estatPlanta():
         file = open(self.file)
         dicConfig = json.load(file)
         file.close()
+        print(dicConfig)
         return dicConfig
 
     def getValues(self,data):
         self.estatTemp = [datetime.now()]
-        print(self.taula)
         for e in self.keys:
-            self.estatTemp.append(round(data[e]["value"],2))
+            if data[e]["value"] == "active":
+                self.estatTemp.append(1)
+            elif data[e]["value"] == "inactive":
+                self.estatTemp.append(0)
+            else:
+                self.estatTemp.append(float(round(data[e]["value"],2)))
         print(self.estatTemp)
 
     def saveDB(self):
@@ -60,8 +71,8 @@ class estatPlanta():
                 passwd='123456789',
                 database=self.db)
             mycursor = mydb.cursor()
+
             mycursor.executemany(self.sql, [tuple(self.estatTemp)])
-            print(self.estatTemp)
             mydb.commit()
             mydb.close()
             print('done')
@@ -77,7 +88,7 @@ class estatPlanta():
                 passwd='123456789',
                 database=self.db)
             mycursor = mydb.cursor()
-            sql = """DELETE FROM """+self.taula+""" WHERE timestamp < '"""+(datetime.now()-timedelta(days=7)).strftime("%Y-%m-%d %H:%M:%S")+"'"
+            sql = """DELETE FROM """+self.taula+""" WHERE timestamp < '"""+(datetime.now()-timedelta(days=60)).strftime("%Y-%m-%d %H:%M:%S")+"'"
             print(sql)
             mycursor.execute(sql)
             mydb.commit()
@@ -127,9 +138,9 @@ class alarmesBio(estatPlanta):
                 passwd='123456789',
                 database=self.db)
             mycursor = mydb.cursor()
-            sql = """INSERT INTO alarmes(timestamp,alarmName,missatge) VALUES(%s,%s,%s)"""
+            sql = """INSERT INTO alarmes(timestamp,alarmName,missatge,alarmValue) VALUES(%s,%s,%s,%s)"""
             print([tuple([datetime.now().strftime("%Y-%m-%d %H:%M:%S"),keyAlarma,self.json["variables"][keyAlarma]])])
-            mycursor.executemany(sql, [tuple([datetime.now().strftime("%Y-%m-%d %H:%M:%S"),keyAlarma,self.json["variables"][keyAlarma]])])
+            mycursor.executemany(sql, [tuple([datetime.now().strftime("%Y-%m-%d %H:%M:%S"),keyAlarma,self.json["variables"][keyAlarma]["message"],self.json["variables"][keyAlarma]["value"]])])
             mydb.commit()
             mydb.close()
             print('done save Alarmes actives')
@@ -197,25 +208,25 @@ g.getQuery()
 # "TCTR_100_ME_CONTA_GAS"
 t0 = datetime.now()
 while(True):
-    try:
-        lecturaDispositiu('192.100.101.89/23', 100)
-        lecturaDispositiu('192.100.101.90/23', 101)
-        lecturaDispositiu('192.100.101.91/23', 102)
-        lecturaDispositiu('192.100.101.92/23', 103)
-        lecturaDispositiu('192.100.101.93/23', 104)
-        lecturaDispositiu('192.100.101.94/23', 106)
+    # try:
+    lecturaDispositiu('192.100.101.89/23', 100)
+    lecturaDispositiu('192.100.101.90/23', 101)
+    lecturaDispositiu('192.100.101.91/23', 102)
+    lecturaDispositiu('192.100.101.92/23', 103)
+    lecturaDispositiu('192.100.101.93/23', 104)
+    lecturaDispositiu('192.100.101.94/23', 106)
 
-        e.getValues(values)
-        e.saveDB()
-        f.getAlarms(values)
-        if t0+timedelta(minutes=10) < datetime.now():
-            g.getConsums(values)
-            t0 = datetime.now()
-        time.sleep(10)
-    except KeyboardInterrupt:
-        raise
-    except Exception as ai:
-        print(ai)
+    e.getValues(values)
+    e.saveDB()
+    f.getAlarms(values)
+    if t0+timedelta(minutes=10) < datetime.now():
+        g.getConsums(values)
+        t0 = datetime.now()
+    time.sleep(10)
+    # except KeyboardInterrupt:
+    #     raise
+    # except Exception as ai:
+    #     print(ai)
 
 
 
