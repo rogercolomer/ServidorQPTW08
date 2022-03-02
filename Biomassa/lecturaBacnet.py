@@ -49,7 +49,6 @@ class estatPlanta():
         file = open(self.file)
         dicConfig = json.load(file)
         file.close()
-        print(dicConfig)
         return dicConfig
 
     def getValues(self,data):
@@ -168,7 +167,6 @@ class consumsBio(estatPlanta):
         super().__init__(file)
 
     def getConsums(self,data):
-        print(self.sql)
         self.consums = {}
         for i in self.json["variables"]:
             try:
@@ -180,7 +178,7 @@ class consumsBio(estatPlanta):
 
     def saveConsum(self):
         try:
-            print(self.consums)
+            print('consums',self.consums)
             mydb = mysql.connector.connect(
                 host='192.100.101.40',
                 user='biomassa',
@@ -189,7 +187,7 @@ class consumsBio(estatPlanta):
             mycursor = mydb.cursor()
             data = [datetime.now()]
             for i in self.consums:
-                data.append(self.consums[i])
+                data.append(float(round(self.consums[i],2)))
             mycursor.executemany(self.sql, [tuple(data)])
             mydb.commit()
             mydb.close()
@@ -208,25 +206,25 @@ g.getQuery()
 # "TCTR_100_ME_CONTA_GAS"
 t0 = datetime.now()
 while(True):
-    # try:
-    lecturaDispositiu('192.100.101.89/23', 100)
-    lecturaDispositiu('192.100.101.90/23', 101)
-    lecturaDispositiu('192.100.101.91/23', 102)
-    lecturaDispositiu('192.100.101.92/23', 103)
-    lecturaDispositiu('192.100.101.93/23', 104)
-    lecturaDispositiu('192.100.101.94/23', 106)
+    try:
+        lecturaDispositiu('192.100.101.89/23', 100)
+        lecturaDispositiu('192.100.101.90/23', 101)
+        lecturaDispositiu('192.100.101.91/23', 102)
+        lecturaDispositiu('192.100.101.92/23', 103)
+        lecturaDispositiu('192.100.101.93/23', 104)
+        lecturaDispositiu('192.100.101.94/23', 106)
 
-    e.getValues(values)
-    e.saveDB()
-    f.getAlarms(values)
-    if t0+timedelta(minutes=10) < datetime.now():
-        g.getConsums(values)
-        t0 = datetime.now()
-    time.sleep(10)
-    # except KeyboardInterrupt:
-    #     raise
-    # except Exception as ai:
-    #     print(ai)
+        e.getValues(values)
+        e.saveDB()
+        f.getAlarms(values)
+        if t0+timedelta(minutes=1) < datetime.now():
+            g.getConsums(values)
+            t0 = datetime.now()
+        time.sleep(10)
+    except KeyboardInterrupt:
+        raise
+    except Exception as ai:
+        print(ai)
 
 
 

@@ -31,77 +31,82 @@ time.sleep(10)
 
 @tb.message_handler(commands=['OTR'])
 def Otr(message):
+    try:
+        mydb = mysql.connector.connect(
+            host='192.100.101.40',
+            user='telegram',
+            passwd='123456789',
+            database='OTR')
+        if mydb.is_connected():
+            mycursor = mydb.cursor()
+            sql = "SELECT timestamp,Estat_OTR,Feedback_V101,V402,V404,V406,V408,TE107,Pot_cremador FROM data ORDER BY timestamp DESC LIMIT 1"
+            mycursor.execute(sql)
+            records = mycursor.fetchall()
+            mydb.close()
 
-    mydb = mysql.connector.connect(
-        host='192.100.101.40',
-        user='telegram',
-        passwd='123456789',
-        database='OTR')
-    if mydb.is_connected():
-        mycursor = mydb.cursor()
-        sql = "SELECT timestamp,Estat_OTR,Feedback_V101,V402,V404,V406,V408,TE107,Pot_cremador FROM data ORDER BY timestamp DESC LIMIT 1"
-        mycursor.execute(sql)
-        records = mycursor.fetchall()
-        mydb.close()
+            if records[0][1] == 1:
+                m1 = 'Seguretat'
+            elif records[0][1] == 2:
+                m1 = 'Repos'
+            elif records[0][1] == 3:
+                m1 = 'Purga'
+            elif records[0][1] == 4:
+                m1 = 'Escalfament'
+            elif records[0][1] == 5:
+                m1 = 'Commutacio'
+            elif records[0][1] == 6:
+                m1 = 'Estandar'
+            elif records[0][1] == 7:
+                m1 = 'Parada'
+            elif records[0][1] == 8:
+                m1 = 'Refredament'
+            elif records[0][1] == 9:
+                m1 = 'Paro variadors'
+            elif records[0][1] == 10:
+                m1 = 'Standby'
 
-        if records[0][1] == 1:
-            m1 = 'Seguretat'
-        elif records[0][1] == 2:
-            m1 = 'Repos'
-        elif records[0][1] == 3:
-            m1 = 'Purga'
-        elif records[0][1] == 4:
-            m1 = 'Escalfament'
-        elif records[0][1] == 5:
-            m1 = 'Commutacio'
-        elif records[0][1] == 6:
-            m1 = 'Estandar'
-        elif records[0][1] == 7:
-            m1 = 'Parada'
-        elif records[0][1] == 8:
-            m1 = 'Refredament'
-        elif records[0][1] == 9:
-            m1 = 'Paro variadors'
-        elif records[0][1] == 10:
-            m1 = 'Standby'
+            if records[0][3] == 2 or records[0][4] == 2 or records[0][5] == 2 or records[0][6] == 2:
+                m2 = 'La maquina no esta funcionant correctament'
+            elif records[0][3] == 4 or records[0][4] == 4 or records[0][5] == 4 or records[0][6] == 4:
+                m2 = 'La maquina està operativa'
+            m3 = 'El motor està treballant al ' + str(records[0][2]) + ' %'
+            m4 = 'Temperatura càmera ' + str(records[0][7]) + ' ºC'
+            m5 = 'Potència cremador '+str(records[0][8])+' %'
+            data = 'Hora : ' + str(records[0][0])
+            m = '*🔥 OTR*: \n' + data + '\nEstat: ' + m1 + '\n' + m2 + '\n' + m3 + '\n' + m4 + '\n' + m5
+            enviar_missatge(message.chat.id, m)
 
-        if records[0][3] == 2 or records[0][4] == 2 or records[0][5] == 2 or records[0][6] == 2:
-            m2 = 'La maquina no esta funcionant correctament'
-        elif records[0][3] == 4 or records[0][4] == 4 or records[0][5] == 4 or records[0][6] == 4:
-            m2 = 'La maquina està operativa'
-        m3 = 'El motor està treballant al ' + str(records[0][2]) + ' %'
-        m4 = 'Temperatura càmera ' + str(records[0][7]) + ' ºC'
-        m5 = 'Potència cremador '+str(records[0][8])+' %'
-        data = 'Hora : ' + str(records[0][0])
-        m = '*🔥 OTR*: \n' + data + '\nEstat: ' + m1 + '\n' + m2 + '\n' + m3 + '\n' + m4 + '\n' + m5
-        enviar_missatge(message.chat.id, m)
-
-        mycursor.close()
-        mydb.close()
-        time.sleep(5)
-    else:
-        print('caca')
+            mycursor.close()
+            mydb.close()
+            time.sleep(5)
+        else:
+            print('caca')
+    except:
+        print('error OTR')
 
 
 @tb.message_handler(commands=['AlarmesAspiracio'])
 def AlarmesAspriacio(message):
-    mydb = mysql.connector.connect(
-        host='192.100.101.40',
-        user='aspiracio',
-        passwd='123456789',
-        database='aspiracio')
+    try:
+        mydb = mysql.connector.connect(
+            host='192.100.101.40',
+            user='aspiracio',
+            passwd='123456789',
+            database='aspiracio')
 
-    sql = "SELECT * FROM alarma"
-    mycursor = mydb.cursor()
-    mycursor.execute(sql)
-    values = mycursor.fetchall()
+        sql = "SELECT * FROM alarma"
+        mycursor = mydb.cursor()
+        mycursor.execute(sql)
+        values = mycursor.fetchall()
 
-    mydb.close()
-    if values != []:
-        m = "🏭* Alarmes Aspiracio*: \n"
-        for i in values:
-            m += i[1] + " \n"
-        enviar_missatge(message.chat.id, m)
+        mydb.close()
+        if values != []:
+            m = "🏭* Alarmes Aspiracio*: \n"
+            for i in values:
+                m += i[1] + " \n"
+            enviar_missatge(message.chat.id, m)
+    except:
+        print('error AlarmesAspiracio')
 
 
 
@@ -109,37 +114,32 @@ def AlarmesAspriacio(message):
 def Comp(message):
     # m = 'Funció no operativa en aquets moments'
     # enviar_missatge(message.chat.id, m)
-
-    mydb = mysql.connector.connect(
-        host='192.100.101.40',
-        user='telegram',
-        passwd='123456789',
-        database='compressors')
-    if mydb.is_connected():
-        mycursor = mydb.cursor()
-        sql = "SELECT timestamp,pres FROM comp_sen ORDER BY timestamp DESC LIMIT 1"
-        mycursor.execute(sql)
-        records = mycursor.fetchall()
-        mydb.close()
-        # print(records[0])
-        print(records)
-        if records == []:
-            m = "No hi ha data"
-        else:
-            m = '💨 *Compressors*: \nLa pressió és de '+str(records[0][1])+' bars'
-        enviar_missatge(message.chat.id, m)
+    try:
+        mydb = mysql.connector.connect(
+            host='192.100.101.40',
+            user='telegram',
+            passwd='123456789',
+            database='compressors')
+        if mydb.is_connected():
+            mycursor = mydb.cursor()
+            sql = "SELECT timestamp,pres FROM comp_sen ORDER BY timestamp DESC LIMIT 1"
+            mycursor.execute(sql)
+            records = mycursor.fetchall()
+            mydb.close()
+            # print(records[0])
+            print(records)
+            if records == []:
+                m = "No hi ha data"
+            else:
+                m = '💨 *Compressors*: \nLa pressió és de '+str(records[0][1])+' bars'
+            enviar_missatge(message.chat.id, m)
+    except:
+        print('error Compressor')
 
 
 @tb.message_handler(commands=['EspurnesAspiracio'])
 def Espurnes(message):
     pass
-
-
-@tb.message_handler(commands=['info'])
-def send_welcome(message):
-    m = "/OTR: ultima dada de la OTR \n/resetOTR: reset RPI OTR \n/TEMP: mostra temp i humitat fabrica \n/ArrencadorsAspiracio \n/StateAspiracio"
-    if message.chat.id == int(chat_id[0]) or message.chat.id == int(chat_id[1]) or message.chat.id == int(chat_id[2]):
-        tb.send_message(str(message.chat.id), str(m))
 
 
 @tb.message_handler(commands=['ArrencadorsAspiracio'])
@@ -171,71 +171,71 @@ def Arrencadors(message):
 
         time.sleep(5)
     except:
-        m = 'hi ha hagut un error llegint de la base de dades'
-        enviar_missatge(message.chat.id, m)
+        print('error Arrencadors Aspiracio')
 
-
-@tb.message_handler(commands=['EstatGeneral'])
-def EstatGeneral(message):
-    m = 'Funció no operativa en aquets moments'
-    enviar_missatge(message.chat.id, m)
 
 @tb.message_handler(commands=['Biomassa'])
 def Biomassa(message):
-    mydb = mysql.connector.connect(
-        host='192.100.101.40',
-        user='biomassa',
-        passwd='123456789',
-        database='biomassa')
+    try:
+        mydb = mysql.connector.connect(
+            host='192.100.101.40',
+            user='biomassa',
+            passwd='123456789',
+            database='biomassa')
 
-    sql = "SELECT * FROM estatTemp ORDER BY timestamp DESC LIMIT 1"
-    mycursor = mydb.cursor()
-    mycursor.execute(sql)
-    values = mycursor.fetchall()
+        sql = "SELECT * FROM estatTemp ORDER BY timestamp DESC LIMIT 1"
+        mycursor = mydb.cursor()
+        mycursor.execute(sql)
+        values = mycursor.fetchall()
 
-    sql = "SHOW FIELDS FROM estatTemp"
-    mycursor.execute(sql)
-    fields = mycursor.fetchall()
-    data = {}
-    count = 0
-    for f in fields:
-        data[f[0]] = values[0][count]
-        count += 1
-    mydb.close()
+        sql = "SHOW FIELDS FROM estatTemp"
+        mycursor.execute(sql)
+        fields = mycursor.fetchall()
+        data = {}
+        count = 0
+        for f in fields:
+            data[f[0]] = values[0][count]
+            count += 1
+        mydb.close()
 
-    m = "🌲 *Biomassa*: \n" \
-        "Hora: " + str(data['timestamp']) + '\n' \
-        "Temp Bio 1: " + str(data['TCTR_106_INT_MCB1_ME_TSOR_AIGUA']) + ' ºC\n' \
-        "Temp Cam 1: " + str(data['TCTR_106_INT_MCB1_ME_TCOM_CAMBRE']) + ' ºC\n' \
-        "Temp Bio 2: " + str(data['TCTR_106_INT_MCB2_ME_TSOR_AIGUA']) + ' ºC\n' \
-        "Temp Cam 2: " + str(data['TCTR_106_INT_MCB2_ME_TCOM_CAMBRE']) + ' ºC\n' \
-        "Temp Pri: " + str(data['TCTR_100_ME_TDEP_90_ALT']) + ' ºC (' + str(data['TCTR_100_XS_TEMP_CALOR_DIPOSIT']) + ' ºC)\n' \
-        "Temp Sec: " + str(data['TCTR_100_ME_TDEP_80_ALT']) + ' ºC (' + str(data['TCTR_100_XS_DIP_CALOR_SEC']) + ' ºC)\n' \
-        "Temp Fred: " + str(data['TCTR_101_ME_TDEP_7_ALT']) + ' ºC (' + str(data['TCTR_106_INT_MABS_ME_XSREFEDA']) + ' ºC)\n' \
-        "Temp Gas 1: " + str(data['TCTR_100_ME_TIMP_ST17_CAS1']) + ' ºC\n' \
-        "Temp Gas 2: " + str(data['TCTR_100_ME_TIMP_ST16_CAS2']) + ' ºC\n'
-    enviar_missatge(message.chat.id, m)
+        m = "🌲 *Biomassa*: \n" \
+            "Hora: " + str(data['timestamp']) + '\n' \
+            "Temp Bio 1: " + str(data['TCTR_106_INT_MCB1_ME_TSOR_AIGUA']) + ' ºC\n' \
+            "Temp Cam 1: " + str(data['TCTR_106_INT_MCB1_ME_TCOM_CAMBRE']) + ' ºC\n' \
+            "Temp Bio 2: " + str(data['TCTR_106_INT_MCB2_ME_TSOR_AIGUA']) + ' ºC\n' \
+            "Temp Cam 2: " + str(data['TCTR_106_INT_MCB2_ME_TCOM_CAMBRE']) + ' ºC\n' \
+            "Temp Pri: " + str(data['TCTR_100_ME_TDEP_90_ALT']) + ' ºC (' + str(data['TCTR_100_XS_TEMP_CALOR_DIPOSIT']) + ' ºC)\n' \
+            "Temp Sec: " + str(data['TCTR_100_ME_TDEP_80_ALT']) + ' ºC (' + str(data['TCTR_100_XS_DIP_CALOR_SEC']) + ' ºC)\n' \
+            "Temp Fred: " + str(data['TCTR_101_ME_TDEP_7_ALT']) + ' ºC (' + str(data['TCTR_106_INT_MABS_ME_XSREFEDA']) + ' ºC)\n' \
+            "Temp Gas 1: " + str(data['TCTR_100_ME_TIMP_ST17_CAS1']) + ' ºC\n' \
+            "Temp Gas 2: " + str(data['TCTR_100_ME_TIMP_ST16_CAS2']) + ' ºC\n'
+        enviar_missatge(message.chat.id, m)
+    except:
+        print('error Biomassa')
 
 
 @tb.message_handler(commands=['AlarmesBiomassa'])
-def Biomassa(message):
-    mydb = mysql.connector.connect(
-        host='192.100.101.40',
-        user='biomassa',
-        passwd='123456789',
-        database='biomassa')
+def alarmesBiomassa(message):
+    try:
+        mydb = mysql.connector.connect(
+            host='192.100.101.40',
+            user='biomassa',
+            passwd='123456789',
+            database='biomassa')
 
-    sql = "SELECT * FROM alarmes"
-    mycursor = mydb.cursor()
-    mycursor.execute(sql)
-    values = mycursor.fetchall()
+        sql = "SELECT * FROM alarmes"
+        mycursor = mydb.cursor()
+        mycursor.execute(sql)
+        values = mycursor.fetchall()
 
-    mydb.close()
-    if values != []:
-        m = "🌲 *Alarmes Biomassa*: \n"
-        for i in values:
-            m += i[2]+" \n"
-        enviar_missatge(message.chat.id, m)
+        mydb.close()
+        if values != []:
+            m = "🌲 *Alarmes Biomassa*: \n"
+            for i in values:
+                m += i[2]+" \n"
+            enviar_missatge(message.chat.id, m)
+    except:
+        print('error AlarmesBiomassa')
 
 def enviar_missatge(idtelebot, missatge):
     for i in chat_id:
@@ -245,17 +245,20 @@ def enviar_missatge(idtelebot, missatge):
 
 @tb.message_handler(commands=['start'])
 def Start(message):
-    infoUser = str(message.from_user)
-    print(message)
-    # iU2 =infoUser.replace("'",'"')
-    # print(iU2)
-    # infoJson = json.loads(iU2)
-    # print(infoJson,type(infoJson))
-    # missatge = infoJson['first_name']+' '+infoJson['last_name']+'\n'
-    # missatge += infoJson['id']
-    # print(missatge)
-    # # missatge = ""
-    tb.send_message("743717839", text=str(infoUser), parse_mode="Markdown")
+    try:
+        infoUser = str(message.from_user)
+        print(message)
+        # iU2 =infoUser.replace("'",'"')
+        # print(iU2)
+        # infoJson = json.loads(iU2)
+        # print(infoJson,type(infoJson))
+        # missatge = infoJson['first_name']+' '+infoJson['last_name']+'\n'
+        # missatge += infoJson['id']
+        # print(missatge)
+        # # missatge = ""
+        tb.send_message("743717839", text=str(infoUser), parse_mode="Markdown")
+    except:
+        print('error Start')
 
 error_counter = 0
 markup = types.ReplyKeyboardMarkup(row_width=1)

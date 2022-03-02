@@ -243,18 +243,20 @@ class Telegram:
             print(e)
 
     def send_paros(self):
-
-        for l in self.ln:
-            c, s, time = self.co[l].get_c()
-            print(l, c, s)
-            if s == 1 :
-                mes = "🏭 *ASPIRACIÓ:* La  " + l + " s'esta engegant"
-                self.send_mes(mes)
-            elif s == 3:
-                mes = "🏭 *ASPIRACIÓ:* La  " + l + " ha deixat de funcionar"
-                self.send_mes(mes)
-            else:
-                pass
+        try:
+            for l in self.ln:
+                c, s, time = self.co[l].get_c()
+                print(l, c, s)
+                if s == 1 :
+                    mes = "🏭 *ASPIRACIÓ:* La  " + l + " s'esta engegant"
+                    self.send_mes(mes)
+                elif s == 3:
+                    mes = "🏭 *ASPIRACIÓ:* La  " + l + " ha deixat de funcionar"
+                    self.send_mes(mes)
+                else:
+                    pass
+        except:
+            print('error Paros')
 
     def read_alarms_aspiracio(self):
         try:
@@ -327,41 +329,44 @@ class Telegram:
             time.sleep(10)
 
     def send_state_OTR(self):
-        s, s_a, timestamp = self.s_OTR.get_s()
-        if s == s_a :
-            pass
-        elif s == 1:
-            mes = "*🔥 OTR:* La màquina està en estat de seguretat "
-            self.send_mes(mes)
-        elif s == 2:
-            mes = "*🔥 OTR:* La màquina està en estat de repos "
-            self.send_mes(mes)
-        elif s == 3:
-            mes = "*🔥 OTR:* La màquina està en estat de purga "
-            self.send_mes(mes)
-        elif s == 4:
-            mes = "*🔥 OTR:* La màquina està en estat d'escalfament "
-            self.send_mes(mes)
-        elif s == 5:
-            mes = "*🔥 OTR:* La màquina està en estat de commutació "
-            self.send_mes(mes)
-        elif s == 6:
-            mes = "*🔥 OTR:* La màquina està correcte"
-            self.send_mes(mes)
-        elif s == 7:
-            mes = "*🔥 OTR:* La màquina està en estat de parada "
-            self.send_mes(mes)
-        elif s == 8:
-            mes = "*🔥 OTR:* La màquina està en estat de refredament "
-            self.send_mes(mes)
-        elif s == 9:
-            mes = "*🔥 OTR:* La màquina està en estat de parada de variadors "
-            self.send_mes(mes)
-        elif s == 10:
-            mes = "*🔥 OTR:* La màquina està en estat de standby "
-            self.send_mes(mes)
-        else:
-            pass
+        try:
+            s, s_a, timestamp = self.s_OTR.get_s()
+            if s == s_a :
+                pass
+            elif s == 1:
+                mes = "*🔥 OTR:* La màquina està en estat de seguretat "
+                self.send_mes(mes)
+            elif s == 2:
+                mes = "*🔥 OTR:* La màquina està en estat de repos "
+                self.send_mes(mes)
+            elif s == 3:
+                mes = "*🔥 OTR:* La màquina està en estat de purga "
+                self.send_mes(mes)
+            elif s == 4:
+                mes = "*🔥 OTR:* La màquina està en estat d'escalfament "
+                self.send_mes(mes)
+            elif s == 5:
+                mes = "*🔥 OTR:* La màquina està en estat de commutació "
+                self.send_mes(mes)
+            elif s == 6:
+                mes = "*🔥 OTR:* La màquina està correcte"
+                self.send_mes(mes)
+            elif s == 7:
+                mes = "*🔥 OTR:* La màquina està en estat de parada "
+                self.send_mes(mes)
+            elif s == 8:
+                mes = "*🔥 OTR:* La màquina està en estat de refredament "
+                self.send_mes(mes)
+            elif s == 9:
+                mes = "*🔥 OTR:* La màquina està en estat de parada de variadors "
+                self.send_mes(mes)
+            elif s == 10:
+                mes = "*🔥 OTR:* La màquina està en estat de standby "
+                self.send_mes(mes)
+            else:
+                pass
+        except:
+            print('error OTR')
 
     def send_mes(self,m):
         for c in chat_id:
@@ -448,15 +453,18 @@ class Telegram:
             time.sleep(10)
 
     def sendPresComp(self):
-        p, p_a, timestamp = self.comp.get_p()
-        if p < 6.3 and p_a < 6.3 and self.bitComp == 0:
-            self.send_mes("*🏭 Compressors:*La pressió està per sota 6.3 Bars")
-            self.bitComp = 1
-        elif p > 6.3 and p_a < 6.3:
-            self.send_mes("*🏭 Compressors:*La pressió ha tornat a pujar")
-            self.bitComp = 0
-        else:
-            pass
+        try:
+            p, p_a, timestamp = self.comp.get_p()
+            if p < 6.3 and p_a < 6.3 and self.bitComp == 0:
+                self.send_mes("*🏭 Compressors:*La pressió està per sota 6.3 Bars")
+                self.bitComp = 1
+            elif p > 6.3 and p_a < 6.3:
+                self.send_mes("*🏭 Compressors:*La pressió ha tornat a pujar")
+                self.bitComp = 0
+            else:
+                pass
+        except:
+            print('error SendPresComp')
 
     def readStateComp(self):
         try:
@@ -499,7 +507,7 @@ class Telegram:
             mes125v = "*🏭 Compressor*: R125V marxa manual "
         elif s125v == 2:
             mes125v = "*🏭 Compressor*: 125V aturat en automàtic "
-        elif s125v == 3:
+        else s125v == 3:
             mes125v = "*🏭 Compressor*: 125V marxa automàtic "
 
         if s100 == s100_a:
@@ -524,99 +532,121 @@ class Telegram:
         self.send_mes_roger('*Estat Telegram:* Estem vius 😄 ')
 
     def readAlarmesBio(self):
-        mydb = mysql.connector.connect(
-            host= '192.100.101.40',
-            user= 'biomassa',
-            passwd= '123456789',
-            database= 'biomassa')
-        mycursor = mydb.cursor()
-        sql = """SELECT * FROM alarmes """
-        mycursor.execute(sql)
-        var = mycursor.fetchall()
-        mydb.close()
-        values = {}
-        for i in var:
-            values[i[1]] = i[2]
-        return values
+        try:
+            mydb = mysql.connector.connect(
+                host= '192.100.101.40',
+                user= 'biomassa',
+                passwd= '123456789',
+                database= 'biomassa')
+            mycursor = mydb.cursor()
+            sql = """SELECT * FROM alarmes """
+            mycursor.execute(sql)
+            var = mycursor.fetchall()
+            mydb.close()
+            values = {}
+            for i in var:
+                values[i[1]] = i[2]
+            return values
+        except:
+            print('error read Alarmes Bio')
+            return None
 
     def readLastAlarmBio(self):
         self.lastAlarm = self.readAlarmesBio()
 
     def sendAlarmBio(self):
-        self.actualAlarm = {}
-        self.actualAlarm = self.readAlarmesBio()
-        for a in self.actualAlarm:
-            if a in self.lastAlarm:
-                pass
-            else:
-                mes = "🌲 *Biomassa*: \n"
-                mes += self.actualAlarm[a]+' \n'
-                self.send_mes_colomer(mes)
-        self.lastAlarm = self.actualAlarm
-        print(self.actualAlarm)
+        try:
+            self.actualAlarm = {}
+            self.actualAlarm = self.readAlarmesBio()
+            for a in self.actualAlarm:
+                if a in self.lastAlarm:
+                    pass
+                else:
+                    mes = "🌲 *Biomassa*: \n"
+                    mes += self.actualAlarm[a]+' \n'
+                    self.send_mes_colomer(mes)
+            self.lastAlarm = self.actualAlarm
+            print(self.actualAlarm)
+        except:
+            print('error send Alarm Bio')
 
     def readAlarmesOTR(self):
-        mydb = mysql.connector.connect(
-            host= '192.100.101.40',
-            user= 'otr',
-            passwd= '123456789',
-            database= 'OTR')
-        mycursor = mydb.cursor()
-        sql = """SELECT * FROM alarmes """
-        mycursor.execute(sql)
-        var = mycursor.fetchall()
-        mydb.close()
-        values = {}
-        for i in var:
-            values[i[1]] = i[2]
-        return values
+        try:
+            mydb = mysql.connector.connect(
+                host= '192.100.101.40',
+                user= 'otr',
+                passwd= '123456789',
+                database= 'OTR')
+            mycursor = mydb.cursor()
+            sql = """SELECT * FROM alarmes """
+            mycursor.execute(sql)
+            var = mycursor.fetchall()
+            mydb.close()
+            values = {}
+            for i in var:
+                values[i[1]] = i[2]
+            return values
+        except:
+            print('error readAlarmesOTR')
+            return None
+
 
     def readLastAlarmOTR(self):
         self.lastAlarmOTR = self.readAlarmesOTR()
 
     def sendAlarmOTR(self):
-        self.actualAlarmOTR = {}
-        self.actualAlarmOTR = self.readAlarmesOTR()
-        for a in self.actualAlarmOTR:
-            if a in self.lastAlarmOTR:
-                pass
-            else:
-                mes = "🔥 *OTR*: \n"
-                mes += self.actualAlarmOTR[a]+' \n'
-                self.send_mes_colomer(mes)
-        self.lastAlarmOTR = self.actualAlarmOTR
+        try:
+            self.actualAlarmOTR = {}
+            self.actualAlarmOTR = self.readAlarmesOTR()
+            for a in self.actualAlarmOTR:
+                if a in self.lastAlarmOTR:
+                    pass
+                else:
+                    mes = "🔥 *OTR*: \n"
+                    mes += self.actualAlarmOTR[a]+' \n'
+                    self.send_mes_colomer(mes)
+            self.lastAlarmOTR = self.actualAlarmOTR
+        except:
+            print('error sendAlarmOTR')
 
     #Aspiracio
     def readAlarmesAspiracio(self):
-        mydb = mysql.connector.connect(
-            host= '192.100.101.40',
-            user= 'aspiracio',
-            passwd= '123456789',
-            database= 'aspiracio')
-        mycursor = mydb.cursor()
-        sql = """SELECT * FROM alarma """
-        mycursor.execute(sql)
-        var = mycursor.fetchall()
-        mydb.close()
-        values = {}
-        for i in var:
-            values[i[2]] = i[1]
-        return values
+        try:
+            mydb = mysql.connector.connect(
+                host= '192.100.101.40',
+                user= 'aspiracio',
+                passwd= '123456789',
+                database= 'aspiracio')
+            mycursor = mydb.cursor()
+            sql = """SELECT * FROM alarma """
+            mycursor.execute(sql)
+            var = mycursor.fetchall()
+            mydb.close()
+            values = {}
+            for i in var:
+                values[i[2]] = i[1]
+            return values
+        except:
+            print('error readAlarmesAspiracio')
+            return None
 
     def readLastAlarmAspiracio(self):
         self.lastAlarmAspiracio = self.readAlarmesAspiracio()
 
     def sendAlarmAspiracio(self):
-        self.actualAlarmAspiracio = {}
-        self.actualAlarmAspiracio = self.readAlarmesAspiracio()
-        for a in self.actualAlarmAspiracio:
-            if a in self.lastAlarmAspiracio:
-                pass
-            else:
-                mes = "🏭 *Aspiracio*: \n"
-                mes += self.actualAlarmAspiracio[a]+' \n'
-                self.send_mes(mes)
-        self.lastAlarmAspiracio = self.actualAlarmAspiracio
+        try:
+            self.actualAlarmAspiracio = {}
+            self.actualAlarmAspiracio = self.readAlarmesAspiracio()
+            for a in self.actualAlarmAspiracio:
+                if a in self.lastAlarmAspiracio:
+                    pass
+                else:
+                    mes = "🏭 *Aspiracio*: \n"
+                    mes += self.actualAlarmAspiracio[a]+' \n'
+                    self.send_mes(mes)
+            self.lastAlarmAspiracio = self.actualAlarmAspiracio
+        except:
+            print('error sendAlarmAspriacio')
 
 """https://api.telegram.org/bot867573955:AAEJUO1URD6ICiinQ-sr_kEPnmuJ2dCMgNs/getUpdates"""
 token = '867573955:AAEJUO1URD6ICiinQ-sr_kEPnmuJ2dCMgNs'
@@ -630,9 +660,7 @@ while(True):
         r_c = t.read_consums()
         if r_c:
             t.send_paros()
-        # r_aa = t.read_alarms_aspiracio()
-        # if r_aa:
-        #     t.alarms_aspiracio()
+
         r_so = t.read_state_OTR()
         if r_so:
             t.send_state_OTR()
