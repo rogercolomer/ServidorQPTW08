@@ -507,7 +507,7 @@ class Telegram:
             mes125v = "*🏭 Compressor*: R125V marxa manual "
         elif s125v == 2:
             mes125v = "*🏭 Compressor*: 125V aturat en automàtic "
-        else s125v == 3:
+        elif s125v == 3:
             mes125v = "*🏭 Compressor*: 125V marxa automàtic "
 
         if s100 == s100_a:
