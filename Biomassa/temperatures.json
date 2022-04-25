@@ -1,0 +1,9 @@
+{
+  "variables": ["TCTR_104_ME_TEXT_CL01",
+                "TCTR_104_ME_HEXT_CL01",
+                "TCTR_104_ME_TAMB_CL07_S2",
+                "TCTR_104_ME_HAMB_CL07_S2"
+            ],
+  "db" : "predictiu_aspiracio",
+  "taula": "dades_biomassa"
+}
