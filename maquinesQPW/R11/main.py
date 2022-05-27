@@ -15,7 +15,7 @@ class Fisico:
         self.varCom = self.readConfig()
 
         self.FechaHoraInici = datetime.now().replace(microsecond=0)
-        self.FechaHora = self.FechaHoraInici + timedelta(seconds=30)    # hora final
+        self.FechaHora = self.FechaHoraInici + timedelta(seconds=60)    # hora final
         self.FechaHoraActual = None                                     #para enviar la ntoficacion y averias en fase
         self.EstadoLinea = 0
         self.Buenas = 0
@@ -31,6 +31,7 @@ class Fisico:
         self.registreProceLast = 0
         self.alarmArray = []
         self.bitParada = 0
+        self.bitCanviTorn = 0
         self.limitRegistre = 4294967295
 
         self.FechaHoraActual = None
@@ -50,7 +51,7 @@ class Fisico:
 
     def upgradeDate(self):
         self.FechaHoraInici = datetime.now().replace(microsecond=0)
-        self.FechaHora = self.FechaHoraInici + timedelta(seconds=30)  # hora final
+        self.FechaHora = self.FechaHoraInici + timedelta(seconds=60)  # hora final
 
     def readConfig(self):
         file = open("/home/root/config.json")
@@ -164,56 +165,64 @@ class Fisico:
                 self.Procesadas += procesadas
                 self.Buenas += buenas
 
-                if self.registreEstat != self.registreEstatLast:
-                    if self.registreEstat == 1:
-                        self.EstadoLinea = 1
-                        self.resetValues()
-                    else:
-                        self.EstadoLinea = 2
-                        self.bitParada = 1
-                    print(self.registreEstat, self.registreEstatLast, "Canvi estat")
+                if datetime.now().hour == 6 and datetime.now().minute == 0 and datetime.now().second == 0 and self.bitCanviTorn == 0 or \
+                    datetime.now().hour == 14 and datetime.now().minute == 0 and datetime.now().second == 0 and self.bitCanviTorn == 0 or \
+                    datetime.now().hour == 22 and datetime.now().minute == 0 and datetime.now().second == 0 and self.bitCanviTorn == 0:
                     self.saveFisico()
-                    if self.EstadoLinea == 1:
-                        if self.alarmaActiva == 1:
-                            self.saveMotivosParada()
-                            self.alarmaActiva = 0
-                            print('Save alarma')
-                    elif self.EstadoLinea == 2:
-                        self.decodeAlarm()
-                    self.resetValues()
-                    self.bitParada = 1
-                if datetime.now() >= self.FechaHora:
-                    self.upgradeDate()
-                    if self.Buenas > 0 or self.Procesadas > 0:
+                    self.bitCanviTorn = 1
+                elif self.bitCanviTorn == 1:
+                    self.bitCanviTorn = 0
+                else:
+                    if self.registreEstat != self.registreEstatLast:
                         if self.registreEstat == 1:
                             self.EstadoLinea = 1
-                            self.saveFisico()
-                            print(self.Procesadas, self.Buenas, self.EstadoLinea, self.MarchaMaquina, ' Funcionant')
-
-                        elif self.registreEstat == 2:
+                            self.resetValues()
+                        else:
                             self.EstadoLinea = 2
-                            self.saveFisico()
-                            self.decodeAlarm()
-                            print(self.Procesadas, self.Buenas, self.EstadoLinea, self.MarchaMaquina, ' Sesta parant')
-                        self.bitParada = 0
-                    else:
-                        if self.bitParada == 0:
-                            self.EstadoLinea = self.registreEstat
-                            self.saveFisico()
-                            if self.EstadoLinea == 2:
-                                self.decodeAlarm()
-                            print(self.Procesadas, self.Buenas, self.EstadoLinea, self.MarchaMaquina, ' Sha parat')
                             self.bitParada = 1
-                    self.resetValues()
+                        print(self.registreEstat, self.registreEstatLast, "Canvi estat")
+                        self.saveFisico()
+                        if self.EstadoLinea == 1:
+                            if self.alarmaActiva == 1:
+                                self.saveMotivosParada()
+                                self.alarmaActiva = 0
+                                print('Save alarma')
+                        elif self.EstadoLinea == 2:
+                            self.decodeAlarm()
+                        self.resetValues()
+                        self.bitParada = 1
+                    if datetime.now() >= self.FechaHora:
+                        self.upgradeDate()
+                        if self.Buenas > 0 or self.Procesadas > 0:
+                            if self.registreEstat == 1:
+                                self.EstadoLinea = 1
+                                self.saveFisico()
+                                print(self.Procesadas, self.Buenas, self.EstadoLinea, self.MarchaMaquina, ' Funcionant')
 
-                elif self.registreEstat == 2 and self.bitParada == 0:
-                    self.bitParada = 1
-                    self.EstadoLinea = 2
-                    self.saveFisico()
-                    self.decodeAlarm()
-                    print(self.Procesadas, self.Buenas, self.EstadoLinea, ' Sha parat extra')
-                    self.Procesadas = 0
-                    self.Buenas = 0
+                            elif self.registreEstat == 2:
+                                self.EstadoLinea = 2
+                                self.saveFisico()
+                                self.decodeAlarm()
+                                print(self.Procesadas, self.Buenas, self.EstadoLinea, self.MarchaMaquina, ' Sesta parant')
+                            self.bitParada = 0
+                        else:
+                            if self.bitParada == 0:
+                                self.EstadoLinea = self.registreEstat
+                                self.saveFisico()
+                                if self.EstadoLinea == 2:
+                                    self.decodeAlarm()
+                                print(self.Procesadas, self.Buenas, self.EstadoLinea, self.MarchaMaquina, ' Sha parat')
+                                self.bitParada = 1
+                        self.resetValues()
+
+                    elif self.registreEstat == 2 and self.bitParada == 0:
+                        self.bitParada = 1
+                        self.EstadoLinea = 2
+                        self.saveFisico()
+                        self.decodeAlarm()
+                        print(self.Procesadas, self.Buenas, self.EstadoLinea, ' Sha parat extra')
+                        self.Procesadas = 0
+                        self.Buenas = 0
             except:
                 print('Error main Data')
 
@@ -327,7 +336,7 @@ f = Fisico()
 while True:
     try:
         f.mainData()
-        time.sleep(1)
+        time.sleep(0.5)
     except KeyboardInterrupt:
         raise
     except:

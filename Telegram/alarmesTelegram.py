@@ -6,11 +6,18 @@ import openpyxl
 import sys
 import threading
 import json
-from datetime import datetime
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 # chat_id = ['743717839', '815134963', '1259688712', '409835547', '1772890260','2103459791','2103459926','857156986']
-time.sleep(60)
+# time.sleep(60)
+
+# "815134963":  {"usuari": "Josep Faja"},
+#   "1259688712": {"usuari": "Isaac Espaulella" },
+#   "409835547":  {"usuari": "Joan Colomer"},
+#   "1772890260": {"usuari": "Arnau Arboix"},
+#   "2103459791": {"usuari": "Raul Gomez"},
+#   "2103459926": {"usuari": "Nil Muntala"},
+#   "857156986":  {"usuari": "Ibrahim Amar"}
 
 def getKeys():
     file = open("/home/roger/repositori/ServidorQPWood/Telegram/usersAlarmesTM.json")
@@ -19,55 +26,6 @@ def getKeys():
     return dicConfig
 
 chat_id = getKeys()
-
-
-
-class Alarm_aspiracio:
-    def __init__(self):
-        self.a = [0, 0, 0, 0, 0]    #Alarma acutal
-        self.la = [0, 0, 0, 0, 0]   #Alarma anterior
-        self.lt = datetime(1994, 1, 14, 14, 30)
-        self.t = datetime.now()
-        self.messages = {}
-
-        self.read_excel()
-
-    def get_a(self):
-        return self.a
-
-    def get_la(self):
-        return self.la
-
-    def get_time(self):
-        return self.t
-
-    def get_ltime(self):
-        return self.lt
-
-    def set_a(self, a):
-        self.a = a
-
-    def set_la(self, a):
-        self.la = a
-
-    def set_ltime(self, t):
-        self.lt = t
-
-    def set_time(self, t):
-        self.t = t
-
-    def read_excel(self):
-        pass
-        # book = openpyxl.load_workbook('/home/user/Telegram/Alarmes_telegram_socket.xlsx')
-        # sheet = book.active
-        # self.messages = {}
-        # for i in range(2, 233):
-        #     c1 = "B" + str(i)
-        #     c2 = "C" + str(i)
-        #     self.messages[sheet[c1].value] = sheet[c2].value
-
-    def get_message(self,n):
-        return self.messages[n]
 
 
 class Consum:
@@ -179,7 +137,6 @@ class Telegram:
     def __init__(self):
         self.ln = ['L01', 'L02', 'L03', 'L04', 'L05', 'L06', 'L07','L08', 'L11', 'L13']
         self.co = {}
-        self.al = Alarm_aspiracio()
         self.init_consums()
         self.s_OTR = state_otr()
         self.t0 = datetime.now()-timedelta(minutes=1)
@@ -194,6 +151,15 @@ class Telegram:
         self.readLastAlarmBio()
         self.readLastAlarmOTR()
         self.readLastAlarmAspiracio()
+
+        self.ndAspiracio = 0        # Done
+        self.ndOTR = 0              # Done
+        self.ndCompressorsS = 0
+        self.ndCompressorsP = 0
+        self.ndBiomassa = 0
+        self.ndQPTW04 = 0           # Done
+        self.ndQPTW05 = 0           #Done
+        self.ndConsumsQ = 0
 
 
 
@@ -219,9 +185,10 @@ class Telegram:
             time.sleep(10)
             print(e)
 
+
+
     def read_consums(self):
         try:
-
             mydb = mysql.connector.connect(
                     host='192.100.101.40',
                     user='telegram',
@@ -229,10 +196,10 @@ class Telegram:
                     database='aspiracio')
 
             sql = "SELECT * FROM consums ORDER BY timestamp DESC LIMIT 1"
-
             mycursor = mydb.cursor()
             mycursor.execute(sql)
             consums = mycursor.fetchall()
+            self.ndAspiracio = self.compData(consums[0][0],self.ndAspiracio,"aspiracio",5)
             for c,l in zip(range(1, 11), self.ln):
                 self.co[l].set_c(consums[0][c])
             mydb.close()
@@ -258,58 +225,6 @@ class Telegram:
         except:
             print('error Paros')
 
-    def read_alarms_aspiracio(self):
-        try:
-
-            mydb = mysql.connector.connect(
-                    host='192.100.101.40',
-                    user='telegram',
-                    passwd='123456789',
-                    database='aspiracio')
-
-            sql = "SELECT timestamp, alarm_code0, alarm_code1, alarm_code2, alarm_code3, alarm_code4 FROM alarmes ORDER BY timestamp DESC LIMIT 1"
-            mycursor = mydb.cursor()
-            mycursor.execute(sql)
-            alarms = mycursor.fetchall()
-            al_list=[]
-            for c, l in zip(range(1, 6), self.ln):
-                al_list.append(alarms[0][c])
-            self.al.set_a(al_list)
-            self.al.set_time(alarms[0][0])
-            mydb.close()
-            return True
-        except Exception as e:
-            time.sleep(10)
-
-    def alarms_aspiracio(self):
-        fora_al = [181,182,81,82,83,84,85,86,87,88,89,90,91,92,34,35,36,37,38]
-        al_in = self.al.get_a()
-        for pos_al in range(len(al_in)):
-            for f in fora_al:
-                if al_in[pos_al] == f:
-                    al_in[pos_al] = 0
-
-        if self.al.get_a() == [0, 0, 0, 0, 0]:
-            pass
-        elif self.al.get_a() == self.al.get_la():
-            if self.al.get_ltime() < datetime.now()-timedelta(days=1):
-                self.al.set_ltime(datetime.now())
-                for a in self.al.get_a():
-                    if a > 0:
-                        self.send_mes(self.al.get_message(a))
-                    else:
-                        pass
-            else:
-                pass
-        elif self.al.get_a()[0] > 0:
-            for a in self.al.get_a():
-                if a > 0:
-                    self.send_mes(self.al.get_message(a))
-                else:
-                    pass
-            self.al.set_la(self.al.get_a())
-            self.al.set_ltime(self.al.get_time())
-
     def read_state_OTR(self):
         try:
             mydb = mysql.connector.connect(
@@ -322,6 +237,7 @@ class Telegram:
             mycursor = mydb.cursor()
             mycursor.execute(sql)
             state = mycursor.fetchall()
+            self.ndOTR = self.compData(state[0][0], self.ndOTR, "OTR",5)
             mydb.close()
             self.s_OTR.set_s(int(state[0][1]), state[0][0])
             return True
@@ -368,20 +284,6 @@ class Telegram:
         except:
             print('error OTR')
 
-    def send_mes(self,m):
-        for c in chat_id:
-            try:
-                tb.send_message(c, text=str(m), parse_mode="Markdown")
-                print(c+' :'+str(m))
-            except Exception as e:
-                print(e)
-
-    def get_consums(self):
-        c = []
-        for k in self.ln:
-            c.append(str(self.co[k]))
-        return c
-
     def readStateWS(self,table):
         try:
             mydb = mysql.connector.connect(
@@ -394,6 +296,7 @@ class Telegram:
             mycursor = mydb.cursor()
             mycursor.execute(sql)
             state = mycursor.fetchall()
+
             mydb.close()
             self.dicWS[table].set_s(int(state[0][1]), state[0][0])
             self.sendStateWS(table)
@@ -404,35 +307,17 @@ class Telegram:
 
     def sendStateWS(self,table):
         s, s_a, timestamp = self.dicWS[table].get_s()
+
         if table == 'state':
             table = 'qptw05'
+            self.ndQPTW05 = self.compData(timestamp, self.ndQPTW05, "QPTW05",5)
         if s == s_a:
-            pass
+            self.ndQPTW04 = self.compData(timestamp, self.ndQPTW04, "QPTW04",5)
         elif s == 1 and s_a == 0:
             self.send_mes_roger("*MesBook:*El WS "+table+" s'esta posant en marxa")
         elif s == 0 and s_a == 1:
             self.send_mes_roger("*MesBook:*El WS "+table+" sha parat")
 
-
-    def send_mes_roger(self,m):
-        try:
-            c = '743717839'
-            tb.send_message(c, text=str(m), parse_mode="Markdown")
-            print(c+' :'+str(m))
-        except Exception as e:
-            time.sleep(10)
-            print('erro send message')
-
-    def send_mes_colomer(self,m):
-        try:
-            c = '743717839'
-            tb.send_message(c, text=str(m), parse_mode="Markdown")
-            c = '409835547'
-            tb.send_message(c, text=str(m), parse_mode="Markdown")
-            print(c+' :'+str(m))
-        except Exception as e:
-            time.sleep(10)
-            print('erro send message')
 
     def readPresComp(self):
         try:
@@ -450,6 +335,7 @@ class Telegram:
             self.comp.set_p(float(values[0][1]), values[0][0])
             return True
         except Exception as e:
+            print(e)
             time.sleep(10)
 
     def sendPresComp(self):
@@ -527,9 +413,6 @@ class Telegram:
             self.send_mes(mes125v)
         if mes100 != 0:
             self.send_mes(mes100)
-
-    def imAlive(self):
-        self.send_mes_roger('*Estat Telegram:* Estem vius 😄 ')
 
     def readAlarmesBio(self):
         try:
@@ -648,6 +531,71 @@ class Telegram:
         except:
             print('error sendAlarmAspriacio')
 
+    def send_mes_roger(self,m):
+        try:
+            c = '743717839'
+            tb.send_message(c, text=str(m), parse_mode="Markdown")
+            print(c+' :'+str(m))
+        except Exception as e:
+            time.sleep(10)
+            print('erro send message')
+
+    def send_mes_colomer(self,m):
+        try:
+            c = '743717839'
+            tb.send_message(c, text=str(m), parse_mode="Markdown")
+            c = '409835547'
+            tb.send_message(c, text=str(m), parse_mode="Markdown")
+            print(c+' :'+str(m))
+        except Exception as e:
+            time.sleep(10)
+            print('erro send message')
+
+    def send_mes(self,m):
+        for c in chat_id:
+            try:
+                tb.send_message(c, text=str(m), parse_mode="Markdown")
+                print(c+' :'+str(m))
+            except Exception as e:
+                print(e)
+
+    def imAlive(self):
+        self.send_mes_roger('*Estat Telegram:* Estem vius 😄 ')
+
+    def readNoValue(self,database,table):
+        try:
+            mydb = mysql.connector.connect(
+                host='192.100.101.40',
+                user='roger',
+                passwd='123456789',
+                database=database)
+
+            sql = "SELECT * FROM "+table+" ORDER BY timestamp DESC LIMIT 1"
+            mycursor = mydb.cursor()
+            mycursor.execute(sql)
+            values = mycursor.fetchall()
+            if database == 'biomassa':
+                self.ndBiomassa = self.compData(values[0][0], self.ndBiomassa, "Biomassa",5)
+            elif database == "consums":
+                self.ndConsumsQ = self.compData(values[0][0], self.ndConsumsQ, "Consums Quart-Horaris",20)
+            mydb.close()
+
+            return True
+        except Exception as e:
+            print(e)
+            time.sleep(10)
+
+    def compData(self,timestamp, bitPas, sistema, minND):
+        if timestamp < datetime.now() - timedelta(minutes=minND) and bitPas == 0:
+            self.send_mes_roger("*Estat Telegram:* L'"+sistema+" no te dades")
+            bitPas = 1
+        elif timestamp < datetime.now() - timedelta(minutes=1):
+            pass
+        else:
+            bitPas = 0
+        return bitPas
+
+
 """https://api.telegram.org/bot867573955:AAEJUO1URD6ICiinQ-sr_kEPnmuJ2dCMgNs/getUpdates"""
 token = '867573955:AAEJUO1URD6ICiinQ-sr_kEPnmuJ2dCMgNs'
 
@@ -660,7 +608,6 @@ while(True):
         r_c = t.read_consums()
         if r_c:
             t.send_paros()
-
         r_so = t.read_state_OTR()
         if r_so:
             t.send_state_OTR()
@@ -682,7 +629,8 @@ while(True):
                 flag_reboot = 1
         elif datetime.now().hour == 1 and flag_reboot == 1:
             flag_reboot = 0
-
+        t.readNoValue("biomassa", "estatTemp")
+        t.readNoValue("consums", "tarifaQuarthoraria")
         tb.stop_bot()
         time.sleep(10)
     except KeyboardInterrupt:

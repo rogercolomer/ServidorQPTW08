@@ -7,7 +7,8 @@ import pyautogui
 import time
 import schedule
 
-time.sleep(30)
+# time. sleep(30)
+
 def refresh():
     pyautogui.press('f5')
 
@@ -23,13 +24,25 @@ driver = webdriver.Chrome('/usr/lib/chromium-browser/chromedriver')  # Optional 
 driver.get("http://192.100.101.40:3000/d/kWrTyjoGz/compressors?orgId=1&refresh=1m")
 driver.maximize_window()
 
-EMAIL_FIELD = (By.XPATH, "//body/div[@id='reactRoot']/div[1]/div[2]/div[3]/div[1]/div[2]/div[1]/div[1]/form[1]/div[1]/div[2]/div[1]/div[1]/input[1]")
+EMAIL_FIELD = (By.XPATH, "//body/div[@id='reactRoot']/div[1]/main[1]/div[3]/div[1]/div[2]/div[1]/div[1]/form[1]/div[1]/div[2]/div[1]/div[1]/input[1]")
 WebDriverWait(driver, 20).until(EC.element_to_be_clickable(EMAIL_FIELD)).send_keys('admin')
+time.sleep(1)
+pyautogui.press('tab')
+time.sleep(1)
+pyautogui.press('1')
+pyautogui.press('2')
+pyautogui.press('3')
+pyautogui.press('4')
+pyautogui.press('5')
+pyautogui.press('6')
+pyautogui.press('7')
+pyautogui.press('8')
+pyautogui.press('9')
+time.sleep(1)
+# PWD_FIELD = (By.XPATH, "//body/div[@id='reactRoot']/div[1]/div[2]/div[3]/div[1]/div[2]/div[1]/div[1]/form[1]/div[2]/div[2]/div[1]/div[1]/input[1]")
+# WebDriverWait(driver, 20).until(EC.element_to_be_clickable(PWD_FIELD)).send_keys('123456789')
 
-PWD_FIELD = (By.XPATH, "//body/div[@id='reactRoot']/div[1]/div[2]/div[3]/div[1]/div[2]/div[1]/div[1]/form[1]/div[2]/div[2]/div[1]/div[1]/input[1]")
-WebDriverWait(driver, 20).until(EC.element_to_be_clickable(PWD_FIELD)).send_keys('123456789')
-
-NEXT_BTN = (By.XPATH, "//span[contains(text(),'Log in')]")
+NEXT_BTN = (By.XPATH, "//body/div[@id='reactRoot']/div[1]/main[1]/div[3]/div[1]/div[2]/div[1]/div[1]/form[1]/button[1]")
 WebDriverWait(driver, 20).until(EC.element_to_be_clickable(NEXT_BTN)).click()
 
 pyautogui.press('f11')
@@ -47,12 +60,10 @@ while True:
         time.sleep(3)
         WebDriverWait(driver, 20).until(EC.element_to_be_clickable(NEXT_BTN2)).click()
 
-
     except Exception as e:
         print(e)
         time.sleep(10)
 
     time.sleep(3600)
     refresh()
-
 

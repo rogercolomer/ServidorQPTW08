@@ -222,6 +222,7 @@ class S7(Comunication):
     def readData(self):
         try:
             self.plc.connect(self.host, 0, 1)  # ip
+            print('connect')
             connection = 1
         except:
             connection = 0
@@ -231,6 +232,7 @@ class S7(Comunication):
                 self.data = []
                 value = self.plc.db_read(self.db, 0, self.len0)  # llegir db (numero_db,primer byte, longitud maxima)
                 # agrupem per les variables per bytes
+                print(self.data)
                 compt = 0
                 for v in self.variables:
                     if self.variables[v]["use"] == "True":
@@ -253,7 +255,12 @@ class S7(Comunication):
 
                 return True
             except:
+                try:
+                    self.plc.disconnect()
+                except:
+                    pass
                 return False
+
         else:
             return False
 

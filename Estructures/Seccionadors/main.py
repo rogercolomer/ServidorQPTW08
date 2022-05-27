@@ -10,11 +10,13 @@ from time import sleep
 sleep(30)
 
 def readSeccionadors(plc):
-    plc.connect('192.168.250.2', 0, 1)
+    plc.connect('192.100.101.33', 0, 1)
     data = plc.db_read(2, 0, 22)     # llegir db (numero_db,primer byte, longitud maxima)
     val = []
+    print(data)
     for i in range(0,22,2):
         val.append(int.from_bytes(data[i:i+2], "big"))
+    print(val)
     plc.disconnect()
     return val
 
@@ -50,23 +52,24 @@ plc = c.Client()
 estatAnterior = readSeccionadors(plc)
 alarmaActiva = 0
 while True:
-    try:
-        estatActual = readSeccionadors(plc)
-        difEstats = []
-        for i in range(len(estatAnterior)):
-            difEstats.append(estatAnterior[i]-estatActual[i])
-        difArr = np.array(difEstats)
-        print(estatAnterior,estatActual,difArr)
-        if np.any(difArr != 0) :
-            saveState(difEstats)
-            alarmaActiva = 1
-            deleteState()
-        if np.all(estatActual == 0) and alarmaActiva == 1:
-            saveState(estatActual)
-            alarmaActiva = 0
-            deleteState()
-        estatAnterior = estatActual
-        sleep(10)
-    except:
-        pass
+    # try:
+    estatActual = readSeccionadors(plc)
+    difEstats = []
+    for i in range(len(estatAnterior)):
+        difEstats.append(estatAnterior[i]-estatActual[i])
+    difArr = np.array(difEstats)
+    print(estatAnterior,estatActual,difArr)
+    if np.any(difArr != 0) :
+        saveState(difEstats)
+        alarmaActiva = 1
+        deleteState()
+    if np.all(estatActual == 0) and alarmaActiva == 1:
+        saveState(estatActual)
+        alarmaActiva = 0
+        deleteState()
+    estatAnterior = estatActual
+    sleep(10)
+    # except:
+    #     print('error')
+    #     sleep(10)
 

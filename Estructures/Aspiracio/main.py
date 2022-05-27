@@ -38,7 +38,6 @@ class Consum:
     def __init__(self):
         self.c = 5
 
-
     def set_consum(self, c):
         self.c = c
 
@@ -119,8 +118,6 @@ class Bucle:
         self.decode_alarm()
         plc.disconnect()
 
-
-
     def read_vib(self):
         plc = c.Client()
         plc.connect('192.168.250.1', 0, 1)
@@ -134,7 +131,6 @@ class Bucle:
         # self.decode_alarm()
 
     def read_nivells(self):
-
         plc = c.Client()
         plc.connect('192.168.250.1', 0, 1)
         data3 = plc.db_read(100, 92, 2)  # llegir db (numero_db,primer byte, longitud maxima)
@@ -154,7 +150,6 @@ class Bucle:
             list_count.append(int.from_bytes([data3[i], data3[i+1]],byteorder='big', signed=False))
         for i in range(4):
             self.counters.append(int(round(UintDuint(list_count[(i*2)+1], list_count[i*2])/1000,0)))
-        # print(self.counters)
         plc.disconnect()
 
 
@@ -164,7 +159,16 @@ class Bucle:
         for k in self.alarm_list:
             for j in range(7, -1, -1):
                 if self.alarms[k].get_alarm()[j] == '1':
-                    if 80 < comptador_al+1 < 93 or comptador_al+1 == 34 or comptador_al+1 == 35 or comptador_al+1 == 36 or comptador_al+1 == 37 or comptador_al+1 == 38 or comptador_al+1 == 41 or comptador_al == 162:
+                    if 80 < comptador_al+1 < 93 or \
+                            comptador_al+1 ==  34 or \
+                            comptador_al+1 ==  35 or \
+                            comptador_al+1 ==  36 or \
+                            comptador_al+1 ==  37 or \
+                            comptador_al+1 ==  38 or \
+                            comptador_al+1 ==  41 or \
+                            comptador_al+1 == 162 or \
+                            comptador_al+1 == 201 or \
+                            comptador_al+1 == 182:
                         pass
                     else:
                         al_num.append(comptador_al+1)
@@ -184,7 +188,7 @@ class Bucle:
         # Alarmes de la DB en un JSON
         alarmesDB = {}
         for v in var:
-            alarmesDB[v[1]] = v[2]
+            alarmesDB[v[2]] = v[1]
         mydb.close()
         # Compraracio de les alarmes escrites a la DB i les llegides per el bacnet
         for k in self.alarm_code:
@@ -192,43 +196,44 @@ class Bucle:
                 del alarmesDB[k]
             else:
                 self.saveAlarm(str(k))
+        print(alarmesDB)
         for i in alarmesDB:
             self.deleteAlarm(i)
 
     def deleteAlarm(self,keyAlarma):
-        pass
         # try:
-        #     mydb = mysql.connector.connect(
-        #         host='192.100.101.40',
-        #         user='aspiracio',
-        #         passwd='123456789',
-        #         database='aspiracio')
-        #     mycursor = mydb.cursor()
-        #     sql = "DELETE FROM alarma WHERE alarmValue='" + keyAlarma + "'"
-        #     mycursor.execute(sql)
-        #     mydb.commit()
-        #     mydb.close()
-        #     print('done Delete Alarmes mariaDB')
+        print(keyAlarma)
+        mydb = mysql.connector.connect(
+            host='192.100.101.40',
+            user='aspiracio',
+            passwd='123456789',
+            database='aspiracio')
+        mycursor = mydb.cursor()
+        sql = "DELETE FROM alarma WHERE alarmValue='" + str(keyAlarma) + "'"
+        mycursor.execute(sql)
+        mydb.commit()
+        mydb.close()
+        print('done Delete Alarmes mariaDB')
         # except:
         #     print('error delete Alarmes ')
 
     def saveAlarm(self,keyAlarma):
-        try:
-            mydb = mysql.connector.connect(
-                host='192.100.101.40',
-                user='aspiracio',
-                passwd='123456789',
-                database='aspiracio')
-            mycursor = mydb.cursor()
-            sql = """INSERT INTO alarmes(timestamp,alarmNumber,missatge) VALUES(%s,%s,%s)"""
-            print([tuple([datetime.now().strftime("%Y-%m-%d %H:%M:%S"), keyAlarma, self.alarmsJson[keyAlarma]])])
-            mycursor.executemany(sql, [
-                tuple([datetime.now().strftime("%Y-%m-%d %H:%M:%S"), keyAlarma, self.alarmsJson[keyAlarma]])])
-            mydb.commit()
-            mydb.close()
-            print('done save Alarmes actives')
-        except:
-            print("Problema guardar alarmes")
+        # try:
+        mydb = mysql.connector.connect(
+            host='192.100.101.40',
+            user='aspiracio',
+            passwd='123456789',
+            database='aspiracio')
+        mycursor = mydb.cursor()
+        sql = """INSERT INTO alarma(timestamp,alarmValue,missatge) VALUES(%s,%s,%s)"""
+        print([tuple([datetime.now().strftime("%Y-%m-%d %H:%M:%S"), keyAlarma, self.alarmsJson[keyAlarma]])])
+        mycursor.executemany(sql, [
+            tuple([datetime.now().strftime("%Y-%m-%d %H:%M:%S"), keyAlarma, self.alarmsJson[keyAlarma]])])
+        mydb.commit()
+        mydb.close()
+        print('done save Alarmes actives')
+        # except:
+        #     print("Problema guardar alarmes")
 
     def save_master(self):
         #guardar els valors a la base de dades del linux per fer telegram
@@ -257,19 +262,6 @@ class Bucle:
             database='aspiracio')
         mycursor = mydb.cursor()
         mycursor.executemany(sql, [tuple(values_sql)])
-        mydb.commit()
-        mydb.close()
-
-    def save_al_code(self,ip):
-        sql = """INSERT INTO alarmes(timestamp, alarm_code,alarm_code0, alarm_code1, alarm_code2, alarm_code3, alarm_code4) VALUES (%s,%s,%s,%s,%s,%s,%s)"""
-
-        mydb = mysql.connector.connect(
-            host=ip,
-            user='aspiracio',
-            passwd='123456789',
-            database='aspiracio')
-        mycursor = mydb.cursor()
-        mycursor.executemany(sql, [(datetime.now(),self.alarm_code[0], self.alarm_code[0], self.alarm_code[1], self.alarm_code[2], self.alarm_code[3], self.alarm_code[4])])
         mydb.commit()
         mydb.close()
 

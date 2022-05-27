@@ -415,6 +415,7 @@ class USB(Comunication):
                 self.makeArray()
                 if self.variables['pOut']['use'] == "False":
                     self.dataA[1] = self.dataA[0]
+                self.dataA[1] = self.dataA[0]
                 return True
             except:
                 try:

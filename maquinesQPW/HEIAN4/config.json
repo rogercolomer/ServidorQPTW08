@@ -4,7 +4,7 @@
   "variables":
   {"state":{"port":"di0", "interrupt":"both","use":"True"},
     "pIn":{"port":"di1", "interrupt":"rising","use":"True"},
-    "pOut":{"port":"di2", "interrupt":"rising","use":"False"}},
+    "pOut":{"port":"di2", "interrupt":"rising","use":"True"}},
   "linea": "HEIAN4",
   "nLinea": 10,
   "seccio":"cnc",

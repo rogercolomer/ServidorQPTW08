@@ -413,6 +413,27 @@
     "password": "123456789",
     "comentari": "serra triade",
     "system":  "mes"},
+"l125":
+   {"name": "RIERGE",
+    "ip": "192.100.100.148",
+    "script": ["main.py","managerDB.py"],
+    "user": "root",
+    "password": "123456789",
+    "system":  "mes"},
+"l126":
+   {"name": "F16",
+    "ip": "192.100.100.148",
+    "script": ["main.py","managerDB.py"],
+    "user": "root",
+    "password": "123456789",
+    "system":  "mes"},
+"l127":
+   {"name": "F17",
+    "ip": "192.100.100.148",
+    "script": ["main.py","managerDB.py"],
+    "user": "root",
+    "password": "123456789",
+    "system":  "mes"},
 "l121":
    {"name": "E10",
     "ip": "192.100.100.148",
@@ -460,8 +481,8 @@
     "password": "123456789",
     "comentari": "",
     "system":  "mes"},
- "l9017":
-   {"name": "HS02",
+ "l9027":
+   {"name": "HS05",
     "ip": "192.100.100.179",
     "script": ["main.py","managerDB.py"],
     "user": "root",
@@ -485,7 +506,7 @@
     "comentari": "",
     "system":  "mes"},
  "l9029":
-   {"name": "E-12",
+   {"name": "E12",
     "ip": "192.100.100.182",
     "script": ["main.py","managerDB.py"],
     "user": "root",
@@ -502,11 +523,11 @@
     "system":  "mes"},
  "l9012":
    {"name": "TA01",
-    "ip": "192.100.100.53",
+    "ip": "192.100.100.184",
     "script": ["main.py","managerDB.py"],
     "user": "root",
     "password": "123456789",
-    "comentari": "H-0 (fliera intorex)",
+    "comentari": "",
     "system":  "mes"},
  "Telegram":
    {"name": "RPI-Telegram",

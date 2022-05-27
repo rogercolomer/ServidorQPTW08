@@ -454,10 +454,12 @@ conf_targ = None
 def F_pin(a):           #SUMAR PEÇA ENTRADA
     print('pIn')
     di10.dataD['pIn'] += 1
+    di10.dataD['pOut'] += 1
 
 def F_pout(a):          #SUMAR PEÇA SORTIDA
     print('pIn')
-    di10.dataD['pIn'] +=1
+    di10.dataD['pIn'] += 1
+    di10.dataD['pOut'] += 1
 
 def F_state(a):         #ESTAT MÀQUINA
     print('pOut')

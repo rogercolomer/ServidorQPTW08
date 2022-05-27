@@ -12,9 +12,10 @@ file.close()
 conn = pymssql.connect('192.100.50.20', 'consultaOF', 'QP_consulta12', "Mesbook")
 print(conn)
 cursor = conn.cursor()
-cursor.execute("""SELECT NumeroOrden, Codigo, Inicio, Linea, Estado,CantidadOf, CantidadProcesada, CantidadBuena,
+cursor.execute("""SELECT NumeroOrden, Codigo, Inicio, Linea, Estado, CantidadOf, CantidadProcesada, CantidadBuena,
                     PersonalObj, PersonalAsignadoReal, ControlesPendientesProduccion , ControlesPendientesCalidad,
                     AveriasSinReportar, Scrap FROM ConsultaOFs_EnCurso;""")
+# cursor.execute("""SELECT COLUMNS FROM ConsultaOFs_EnCurso;""")
 hora = datetime.now()
 mydb = mysql.connector.connect(
             host='localhost',
@@ -23,14 +24,13 @@ mydb = mysql.connector.connect(
             database='visualitzadorMesbook')
 mycursor = mydb.cursor()
 
-
 for row in cursor:
     a = list(row)
     a.append(hora)
     #determinar estat de maquina com a int 1 marcha 0 paro
-    if row[4]=='PAUSA':
+    if row[4]=='Pausa':
         estat = 0
-    elif row[4]=='MARCHA':
+    elif row[4]=='Marcha' or row[4]=='ArranqueAdministrativa':
         estat = 1
     else:
         estat = 0
@@ -49,21 +49,30 @@ for row in cursor:
     except:
         a.append(None)
     if estat == 1:
+        try:
+            sql = """INSERT INTO """+str(lines[a[3]])+""" (NumeroOrden, Codigo, Inicio, CantidadOf, CantidadProcesada, CantidadBuena,
+                                PersonalObj, PersonalAsignadoReal, ControlesPendientesProduccion , ControlesPendientesCalidad,
+                                AveriasSinReportar, Scrap, timestamp, Estado,percentProd)VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
+            a.pop(3)
+            a.pop(3)
+            mycursor.executemany(sql, [tuple(a)])
+            print(row)
+        except:
+            print('error al ffer lincert')
 
-        sql = """INSERT INTO """+str(lines[a[3]])+""" (NumeroOrden, Codigo, Inicio, CantidadOf, CantidadProcesada, CantidadBuena,
-                            PersonalObj, PersonalAsignadoReal, ControlesPendientesProduccion , ControlesPendientesCalidad,
-                            AveriasSinReportar, Scrap, timestamp, Estado,percentProd)VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
-        a.pop(3)
-        a.pop(3)
-        mycursor.executemany(sql, [tuple(a)])
-        print(row)
-
+# try:
 conn.close()
 mydb.commit()
+# except:
+#     print('commit')
 
+# try:
 for l in lines:
     sql = "DELETE FROM "+lines[l]+" WHERE timestamp < '" + hora.strftime('%Y/%m/%d %H:%M:%S') + "'"
+    print(l)
     mycursor.execute(sql)
+
 mydb.commit()
 mydb.close()
-
+# except:
+#     print('delete')

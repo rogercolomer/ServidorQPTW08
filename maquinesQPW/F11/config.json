@@ -1,0 +1,20 @@
+{
+  "protocol": "Snap7",
+  "variables":
+  {
+    "pIn":{"len":2,"use":"True"},
+    "pOut":{"len":2,"use":"True"},
+    "state":{"len":1,"use":"True"},
+    "scrapIn":{"len":2,"use":"False"},
+    "scrapOut": {"len": 2, "use": "False"},
+    "a0":{"len":1,"use":"True"},
+    "a1":{"len":1,"use":"True"},
+    "a2":{"len":1,"use":"True"},
+    "a3":{"len":1,"use":"True"}},
+  "linea": "F11",
+  "nLinea": 85,
+  "seccio":"fregadores",
+  "password": "123456789",
+  "db": 66,
+  "ip": "192.168.250.1"
+}

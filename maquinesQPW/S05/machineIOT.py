@@ -250,6 +250,8 @@ class S7(Comunication):
                             pass
                 self.plc.disconnect()
                 self.dataA = self.data
+                self.dataA[0] = self.dataA[1]
+                print(self.dataA)
 
                 return True
             except:

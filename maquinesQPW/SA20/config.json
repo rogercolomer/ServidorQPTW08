@@ -1,0 +1,15 @@
+{
+  "protocol": "gpio",
+  "targeta": "DI5",
+  "variables":
+  {"pIn":{"port":"di0", "interrupt":"rising","use":"True"},
+   "pOut":{"port":"di1", "interrupt":"rising","use":"True"},
+   "state":{"port":"di2", "interrupt":"both","use":"True"}},
+  "linea": "SA20",
+  "nLinea": 9028,
+  "seccio":"decoracio",
+  "password": "123456789"
+}
+
+
+

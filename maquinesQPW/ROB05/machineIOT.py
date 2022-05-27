@@ -455,6 +455,7 @@ conf_targ = None
         #FUNCIONS ISR
 
 def F_pin(a):           #SUMAR PEÇA ENTRADA
+    print('suma peça_in')
     di10.dataD['pIn'] += 1
     print('suma peça_in')
 

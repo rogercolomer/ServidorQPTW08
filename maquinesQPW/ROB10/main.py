@@ -14,7 +14,7 @@ class Fisico:
         self.varCom = self.readConfig()
 
         self.FechaHoraInici = datetime.now().replace(microsecond=0)
-        self.FechaHora = self.FechaHoraInici + timedelta(seconds=30)    # hora final
+        self.FechaHora = self.FechaHoraInici + timedelta(seconds=120)    # hora final
         self.FechaHoraActual = None                                     #para enviar la ntoficacion y averias en fase
         self.FechaHoraScrap = datetime.now().replace(microsecond=0)
         self.EstadoLinea = 0
@@ -51,7 +51,7 @@ class Fisico:
 
     def upgradeDate(self):
         self.FechaHoraInici = datetime.now().replace(microsecond=0)
-        self.FechaHora = self.FechaHoraInici + timedelta(seconds=30)  # hora final
+        self.FechaHora = self.FechaHoraInici + timedelta(seconds=120)  # hora final
 
     def readConfig(self):
         file = open("/home/root/config.json")
