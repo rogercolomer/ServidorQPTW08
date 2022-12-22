@@ -96,7 +96,7 @@ class Bucle:
     def read_consums(self):
         val = []
         plc = c.Client()
-        plc.connect('192.168.250.1', 0, 1)
+        plc.connect('x.x.x.x', 0, 1)
         data0 = plc.db_read(100, 0, 32)     # llegir db (numero_db,primer byte, longitud maxima)
         for i in range(0, 32, 4):
             val.append(get_real(data0, i))
@@ -109,7 +109,7 @@ class Bucle:
 
     def read_alarms(self):
         plc = c.Client()
-        plc.connect('192.168.250.1', 0, 1)
+        plc.connect('x.x.x.x', 0, 1)
         data3 = plc.db_read(100, 50, 37)     # llegir db (numero_db,primer byte, longitud maxima)296 booleans
         list_alarm = []
         for i in data3:
@@ -120,7 +120,7 @@ class Bucle:
 
     def read_vib(self):
         plc = c.Client()
-        plc.connect('192.168.250.1', 0, 1)
+        plc.connect('x.x.x.x', 0, 1)
         data3 = plc.db_read(100, 88, 4)  # llegir db (numero_db,primer byte, longitud maxima)
         list_vib = []
         for i in range(0, 4, 2):
@@ -132,7 +132,7 @@ class Bucle:
 
     def read_nivells(self):
         plc = c.Client()
-        plc.connect('192.168.250.1', 0, 1)
+        plc.connect('x.x.x.x', 0, 1)
         data3 = plc.db_read(100, 92, 2)  # llegir db (numero_db,primer byte, longitud maxima)
 
         lebels = format(int.from_bytes([data3[0], data3[1]],byteorder='big', signed=False),'016b')
@@ -143,7 +143,7 @@ class Bucle:
             self.nivells.append(lebels[i])
         plc.disconnect()
         plc = c.Client()
-        plc.connect('192.168.250.1', 0, 1)
+        plc.connect('x.x.x.x', 0, 1)
         data3 = plc.db_read(100, 94, 16)  # llegir db (numero_db,primer byte, longitud maxima)
         list_count = []
         for i in range(0, 16, 2):
@@ -177,10 +177,10 @@ class Bucle:
         self.alarm_code = al_num
 
         mydb = mysql.connector.connect(
-            host='192.100.101.40',
-            user='aspiracio',
-            passwd='123456789',
-            database='aspiracio')
+            host='x.x.x.x',
+            user='user',
+            passwd='passwd',
+            database='database')
         mycursor = mydb.cursor()
         sql = """SELECT * FROM alarma """
         mycursor.execute(sql)
@@ -204,10 +204,10 @@ class Bucle:
         # try:
         print(keyAlarma)
         mydb = mysql.connector.connect(
-            host='192.100.101.40',
-            user='aspiracio',
-            passwd='123456789',
-            database='aspiracio')
+            host='x.x.x.x',
+            user='user',
+            passwd='passwd',
+            database='database')
         mycursor = mydb.cursor()
         sql = "DELETE FROM alarma WHERE alarmValue='" + str(keyAlarma) + "'"
         mycursor.execute(sql)
@@ -220,10 +220,10 @@ class Bucle:
     def saveAlarm(self,keyAlarma):
         # try:
         mydb = mysql.connector.connect(
-            host='192.100.101.40',
-            user='aspiracio',
-            passwd='123456789',
-            database='aspiracio')
+            host='x.x.x.x',
+            user='user',
+            passwd='passwd',
+            database='database')
         mycursor = mydb.cursor()
         sql = """INSERT INTO alarma(timestamp,alarmValue,missatge) VALUES(%s,%s,%s)"""
         print([tuple([datetime.now().strftime("%Y-%m-%d %H:%M:%S"), keyAlarma, self.alarmsJson[keyAlarma]])])
@@ -238,9 +238,9 @@ class Bucle:
     def save_master(self):
         #guardar els valors a la base de dades del linux per fer telegram
         try:
-            self.save_consums('192.100.101.40')
-            self.save_vib('192.100.101.40')
-            self.save_nivells('192.100.101.40')
+            self.save_consums('x.x.x.x')
+            self.save_vib('x.x.x.x')
+            self.save_nivells('x.x.x.x')
             return True
         except:
             return False
@@ -256,10 +256,10 @@ class Bucle:
         sql = """INSERT INTO consums("""+name_sql+""") VALUES ("""+s_sql+""")"""
 
         mydb = mysql.connector.connect(
-            host=ip,
-            user='aspiracio',
-            passwd='123456789',
-            database='aspiracio')
+            host='x.x.x.x',
+            user='user',
+            passwd='passwd',
+            database='database')
         mycursor = mydb.cursor()
         mycursor.executemany(sql, [tuple(values_sql)])
         mydb.commit()
@@ -268,11 +268,11 @@ class Bucle:
     def save_vib(self, ip):
         sql = """INSERT INTO impulsio(timestamp, vibracio_analogia, vibracio_percentatge) VALUES (%s,%s,%s)"""
 
-        mydb = mysql.connector.connect(
-            host=ip,
-            user='aspiracio',
-            passwd='123456789',
-            database='aspiracio')
+       mydb = mysql.connector.connect(
+            host='x.x.x.x',
+            user='user',
+            passwd='passwd',
+            database='database')
         mycursor = mydb.cursor()
         mycursor.executemany(sql, [(datetime.now(), self.vibracions[0], self.vibracions[1])])
         mydb.commit()
