@@ -14,10 +14,10 @@ def save_data(data,sql):
         data.insert(0, datetime.now())
 
         mydb = mysql.connector.connect(
-            host= '192.100.101.40',
-            user='compressors',
-            passwd='123456789',
-            database='compressors')
+            host='x.x.x.x',
+            user='user',
+            passwd='passwd',
+            database='database')
         mycursor = mydb.cursor()
         mycursor.executemany(sql, [tuple(data)])
         mydb.commit()
@@ -32,7 +32,7 @@ def readPLC():
     # try:
     val = []
     plc = c.Client()
-    plc.connect('192.100.101.36', 0, 1)  # ip
+    plc.connect('x.x.x.x', 0, 1)  # ip
     value = plc.db_read(1, 0, 6)  # llegir db (numero_db,primer byte, longitud maxima)
     print(value[:],type(value))
     plc.disconnect()
@@ -55,7 +55,7 @@ def setState(func):
     b = func.to_bytes(1, 'big')
     print(b[0])
     plc = c.Client()
-    plc.connect('192.100.101.36', 0, 1)  # ip
+    plc.connect('x.x.x.x', 0, 1)  # ip
     plc.db_write(1, 0, b)
     plc.disconnect()
     plc.destroy()
