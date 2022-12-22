@@ -25,7 +25,7 @@ driver.get("http://x.x.x.x:3000/d/cw6ECjTMk/aspiracio?orgId=1&refresh=1m&from=no
 driver.maximize_window()
 
 EMAIL_FIELD = (By.XPATH, "//body/div[@id='reactRoot']/div[1]/main[1]/div[3]/div[1]/div[2]/div[1]/div[1]/form[1]/div[1]/div[2]/div[1]/div[1]/input[1]")
-WebDriverWait(driver, 20).until(EC.element_to_be_clickable(EMAIL_FIELD)).send_keys('admin')
+WebDriverWait(driver, 20).until(EC.element_to_be_clickable(EMAIL_FIELD)).send_keys('xxxx')
 time.sleep(1)
 pyautogui.press('tab')
 time.sleep(1)
