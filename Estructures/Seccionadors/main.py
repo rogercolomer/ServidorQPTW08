@@ -10,7 +10,7 @@ from time import sleep
 sleep(30)
 
 def readSeccionadors(plc):
-    plc.connect('192.100.101.33', 0, 1)
+    plc.connect('x.x.x.x', 0, 1)
     data = plc.db_read(2, 0, 22)     # llegir db (numero_db,primer byte, longitud maxima)
     val = []
     print(data)
@@ -23,10 +23,10 @@ def readSeccionadors(plc):
 def saveState(estat):
     sql = """INSERT INTO SeccionadorsGenerals(timestamp, 1A, 1B, Biomassa, Compressors, 2A, 2B, 2C, Magatzem, OTR_Pintura, Aspiracio, DiferencialSAI) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
     mydb = mysql.connector.connect(
-        host='192.100.101.40',
-        user='consums',
-        passwd='123456789',
-        database='consums')
+        host='x.x.x.x',
+        user='xxxx',
+        passwd='xx',
+        database='xxxx')
     mycursor = mydb.cursor()
     mycursor.executemany(sql, [(datetime.now(),estat[0], estat[1], estat[2], estat[3], estat[4], estat[5], estat[6], estat[7], estat[8], estat[9], estat[10])])
     mydb.commit()
@@ -35,10 +35,10 @@ def saveState(estat):
 def deleteState():
     sql = """SELECT * FROM SeccionadorsGenerals ORDER BY timestamp DESC LIMIT 2"""
     mydb = mysql.connector.connect(
-        host='192.100.101.40',
-        user='consums',
-        passwd='123456789',
-        database='consums')
+        host='x.x.x.x',
+        user='xxx',
+        passwd='xx',
+        database='xxx')
     mycursor = mydb.cursor()
     mycursor.execute(sql)
     var = mycursor.fetchall()
