@@ -63,10 +63,10 @@ class estatPlanta():
     def saveDB(self):
         try:
             mydb = mysql.connector.connect(
-                host='192.100.101.40',
-                user='biomassa',
-                passwd='123456789',
-                database=self.db)
+            host='x.x.x.x',
+            user='user',
+            passwd='passwd',
+            database='database')
             mycursor = mydb.cursor()
             print(self.estatTemp)
             mycursor.executemany(self.sql, [tuple(self.estatTemp)])
@@ -81,10 +81,10 @@ class estatPlanta():
         try:
             if self.db != 'predictiu_aspiracio':
                 mydb = mysql.connector.connect(
-                    host='192.100.101.40',
-                    user='biomassa',
-                    passwd='123456789',
-                    database=self.db)
+            host='x.x.x.x',
+            user='user',
+            passwd='passwd',
+            database='database')
                 mycursor = mydb.cursor()
                 sql = """DELETE FROM """ + self.taula + """ WHERE timestamp < '""" + (
                         datetime.now() - timedelta(days=60)).strftime("%Y-%m-%d %H:%M:%S") + "'"
@@ -106,10 +106,10 @@ class alarmesBio(estatPlanta):
             if data[i]["value"] != 'inactive':
                 alarmesActives[i] = self.json["variables"][i]
         mydb = mysql.connector.connect(
-            host= '192.100.101.40',
-            user= 'biomassa',
-            passwd= '123456789',
-            database= self.db)
+            host='x.x.x.x',
+            user='user',
+            passwd='passwd',
+            database='database')
         mycursor = mydb.cursor()
         sql = """SELECT * FROM alarmes """
         mycursor.execute(sql)
@@ -213,10 +213,10 @@ class tempHumiBio(estatPlanta):
         try:
             print('consums',self.consums)
             mydb = mysql.connector.connect(
-                host='192.100.101.40',
-                user='biomassa',
-                passwd='123456789',
-                database=self.db)
+            host='x.x.x.x',
+            user='user',
+            passwd='passwd',
+            database='database')
             mycursor = mydb.cursor()
             data = [datetime.now()]
             for i in self.consums:
@@ -242,12 +242,12 @@ t0 = datetime.now()
 minAnterior = datetime.now().minute
 while(True):
     try:
-        lecturaDispositiu('192.100.101.89/23', 100)
-        lecturaDispositiu('192.100.101.90/23', 101)
-        lecturaDispositiu('192.100.101.91/23', 102)
-        lecturaDispositiu('192.100.101.92/23', 103)
-        lecturaDispositiu('192.100.101.93/23', 104)
-        lecturaDispositiu('192.100.101.94/23', 106)
+        lecturaDispositiu(x.x.x.x, X)
+        lecturaDispositiu(x.x.x.x, X)
+        lecturaDispositiu(x.x.x.x', X)
+        lecturaDispositiu(x.x.x.x, X)
+        lecturaDispositiu(x.x.x.x, X)
+        lecturaDispositiu(x.x.x.x, X)
 
         e.getValues(values)
         e.saveDB()
