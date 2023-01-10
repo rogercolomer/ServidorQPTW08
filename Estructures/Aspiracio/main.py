@@ -329,9 +329,9 @@ class Bucle:
 
         mydb = mysql.connector.connect(
             host=ip,
-            user='aspiracio',
-            passwd='123456789',
-            database='aspiracio')
+            user='xxxx',
+            passwd='xxxx',
+            database='xxxx')
         mycursor = mydb.cursor()
         print('estat',self.estatB)
         mycursor.executemany(sql, [(datetime.now(), self.nivells[0], self.nivells[1], self.nivells[2], self.nivells[3],
