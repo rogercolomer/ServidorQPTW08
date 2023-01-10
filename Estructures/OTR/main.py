@@ -30,7 +30,7 @@ class Values:
             values = [datetime.now()]
             alarmes = [datetime.now()]
             plc = c.Client()
-            plc.connect('10.10.10.101', 0, 1)
+            plc.connect('x.x.x.x', 0, 1)
             data = plc.db_read(103, 0, 126)  # llegir db (numero_db,primer byte, longitud maxima)
             for o in range(0, 56, 4):
                 values.append(get_real(data, o))
@@ -79,10 +79,10 @@ class Values:
     def save_DB2(self,sql,data):
         try:
             mydb = mysql.connector.connect(
-                host='192.100.101.40',
-                user='otr',
-                passwd='123456789',
-                database='OTR')
+                host='x.x.x.x',
+                user='xxxx',
+                passwd='xxxx',
+                database='xxx')
             mycursor = mydb.cursor()
             mycursor.executemany(sql, [tuple(data)])
             mydb.commit()
@@ -113,10 +113,10 @@ class Values:
     def readAlarms(self):
         try:
             mydb = mysql.connector.connect(
-                host='192.100.101.40',
-                user='otr',
-                passwd='123456789',
-                database='OTR')
+                host='x.x.x.x',
+                user='xxx',
+                passwd='xxxx',
+                database='xxx')
             mycursor = mydb.cursor()
             sql = """SELECT * FROM alarmes """
             mycursor.execute(sql)
@@ -140,10 +140,10 @@ class Values:
     def deleteAlarm(self):
         try:
             mydb = mysql.connector.connect(
-                host='192.100.101.40',
-                user='otr',
-                passwd='123456789',
-                database='OTR')
+                host='x.x.x.x',
+                user='xxx',
+                passwd='xxxx',
+                database='xxx')
             mycursor = mydb.cursor()
             sql = "DELETE FROM alarmes WHERE alarmNumber='" + keyAlarma + "'"
             mycursor.execute(sql)
@@ -157,10 +157,10 @@ class Values:
         # try:
         print(type(keyAlarma))
         mydb = mysql.connector.connect(
-            host='192.100.101.40',
-            user='otr',
-            passwd='123456789',
-            database='OTR')
+            host='x.x.x.x',
+            user='xxx',
+            passwd='xxx',
+            database='xxx')
         mycursor = mydb.cursor()
         sql = """INSERT INTO alarmes(timestamp,alarmNumber,missatge) VALUES(%s,%s,%s)"""
         print([tuple([datetime.now().strftime("%Y-%m-%d %H:%M:%S"),keyAlarma,self.alarmsJson[keyAlarma]])])
