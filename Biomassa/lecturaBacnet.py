@@ -132,9 +132,9 @@ class alarmesBio(estatPlanta):
     def saveAlarm(self,keyAlarma):
         try:
             mydb = mysql.connector.connect(
-                host='192.100.101.40',
-                user='biomassa',
-                passwd='123456789',
+                host='x.x.x.x',
+                user='xxxxx',
+                passwd='xxxx',
                 database=self.db)
             mycursor = mydb.cursor()
             sql = """INSERT INTO alarmes(timestamp,alarmName,missatge,alarmValue) VALUES(%s,%s,%s,%s)"""
@@ -149,9 +149,9 @@ class alarmesBio(estatPlanta):
     def deleteAlarm(self,keyAlarma):
         try:
             mydb = mysql.connector.connect(
-                host='192.100.101.40',
-                user='biomassa',
-                passwd='123456789',
+                host='x.x.x.x',
+                user='xxxxx',
+                passwd='xxxx',
                 database=self.db)
             mycursor = mydb.cursor()
             sql = "DELETE FROM alarmes WHERE alarmName='"+keyAlarma+"'"
@@ -180,9 +180,9 @@ class consumsBio(estatPlanta):
         try:
             print('consums',self.consums)
             mydb = mysql.connector.connect(
-                host='192.100.101.40',
-                user='biomassa',
-                passwd='123456789',
+                host='x.x.x.x',
+                user='xxxx',
+                passwd='xxxx',
                 database=self.db)
             mycursor = mydb.cursor()
             data = [datetime.now()]
